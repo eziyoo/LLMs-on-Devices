@@ -18,10 +18,10 @@ def fetch_models(library="gguf", sort="likes", direction=-1): # sort dsc based o
         sort=sort,
         direction=direction,
         full=True,
-        limit=1000 # exctract top 1000 models
+        limit=100 # exctract top 100 models
     )
 
-    for model in enumerate(models_iterator, start=1):
+    for m, model in enumerate(models_iterator, start=1):
         all_models.append({
             "model": model.id, # model name
             "likes": model.likes or 0, # count of likes
