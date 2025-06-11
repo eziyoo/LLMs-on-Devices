@@ -1,11 +1,13 @@
+# Fetching GGUF models
 
 from huggingface_hub import HfApi, login
 import csv, time
 
+# Use login with api_token for avoid limit
 #api_token = "***"
 #login(api_token)
 
-def fetch_models(library="gguf", sort="likes", direction=-1):
+def fetch_models(library="gguf", sort="likes", direction=-1): # sort dsc based on count of likes
     api = HfApi()
     all_models = []
 
@@ -16,16 +18,18 @@ def fetch_models(library="gguf", sort="likes", direction=-1):
         sort=sort,
         direction=direction,
         full=True,
-        limit=1000
+        limit=1000 # exctract top 1000 models
     )
 
-    for i, model in enumerate(models_iterator, start=1):
+    for model in enumerate(models_iterator, start=1):
         all_models.append({
-            "model": model.id,
-            "likes": model.likes or 0,
-            "downloads": model.downloads or 0,
-            "tags": ", ".join(model.tags or [])
+            "model": model.id, # model name
+            "likes": model.likes or 0, # count of likes
+            "downloads": model.downloads or 0, # count of download
+            "tags": ", ".join(model.tags or []) # tag contain a lot of different features (need to separate each of them)
         })
+
+        # Implant a timer to stop after every specefic chunk for avoiding api limit
 
         """
         # Sleep after every 100 models
@@ -34,11 +38,11 @@ def fetch_models(library="gguf", sort="likes", direction=-1):
             time.sleep(5)
         """
 
-    print(f"Fetched {len(all_models)} models total.")
+    print(f"Fetched {len(all_models)} models total.") # showing count of fetched models after each iteration
     return all_models
 
 
-def clean_and_filter_models(models):
+def clean_and_filter_models(models): # filter rows based on specefic words
     cleaned_models = []
 
     for model in models:
@@ -50,13 +54,14 @@ def clean_and_filter_models(models):
         if "reinforcement-learning" not in tag_list:
             cleaned_models.append(model)
         """
-        # Make Model name better"
+        # Make Model name better
         model["model"] = model["model"].split("/", 1)[-1]
         cleaned_models.append(model)
 
     return cleaned_models
 
-def save_to_csv(models, filename="excel/gguf_models.csv"):
+def save_to_csv(models, filename="excel/gguf_models.csv"): # saving as a file
+
     if not models:
         print("No models to save.")
         return
@@ -69,6 +74,6 @@ def save_to_csv(models, filename="excel/gguf_models.csv"):
     print(f"Saved {len(models)} models to {filename}.")
 
 if __name__ == "__main__":
-    models = fetch_models()  # Assume this returns a list of dicts
+    models = fetch_models()  # assume returns a list of dicts
     filtered_models = clean_and_filter_models(models)
     save_to_csv(filtered_models)
