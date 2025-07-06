@@ -63,25 +63,46 @@ class MainActivity(
 
         val models = listOf(
             Downloadable(
-                "Phi-2 7B (Q4_0, 1.6 GiB)",
-                Uri.parse("https://huggingface.co/ggml-org/models/resolve/main/phi-2/ggml-model-q4_0.gguf?download=true"),
-                File(extFilesDir, "phi-2-q4_0.gguf")
+                "qwen2.5-1.5b-instruct (Q4_K_M, 1.12 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-1.5b-instruct-q4_k_m.gguf")
             ),
             Downloadable(
-                "TinyLlama 1.1B (f16, 2.2 GiB)",
-                Uri.parse("https://huggingface.co/ggml-org/models/resolve/main/tinyllama-1.1b/ggml-model-f16.gguf?download=true"),
-                File(extFilesDir, "tinyllama-1.1-f16.gguf")
+                "phi-2 (Q4_K_M, 1.79 GB)",
+                Uri.parse("https://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "phi-2.Q4_K_M.gguf")
             ),
             Downloadable(
-                "Phi 2 DPO (Q3_K_M, 1.48 GiB)",
-                Uri.parse("https://huggingface.co/TheBloke/phi-2-dpo-GGUF/resolve/main/phi-2-dpo.Q3_K_M.gguf?download=true"),
-                File(extFilesDir, "phi-2-dpo.Q3_K_M.gguf")
+                "qwen2.5-3b-instruct (Q4_K_M, 2.1 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-3b-instruct-q4_k_m.gguf")
             ),
             Downloadable(
-                "Your New Model (Mistral Q4)",
-                Uri.parse("https://huggingface.co/your-repo/resolve/main/your-model-name.gguf?download=true"),
-                File(extFilesDir, "your-model-name.gguf")
+                "OLMoE-1B-7B-0125-Instruct (Q4_K_M, 4.21 GB)",
+                Uri.parse("https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct-GGUF/resolve/main/OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "qwen2.5-7b-instruct (Q4_K_M, 3.99 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf")
+            ),
+            Downloadable(
+                "Meta-Llama-3.1-8B-Instruct (Q4_K_M, 4.92 GB)",
+                Uri.parse("https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "gemma-2-9b-it (Q4_K_M, 5.76 GB)",
+                Uri.parse("https://huggingface.co/bartowski/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "gemma-2-9b-it-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "Qwen2.5-7B.Q4_K_M.gguf (Q4_K_M, 4.68 GB)",
+                Uri.parse("https://huggingface.co/QuantFactory/Qwen2.5-7B-GGUF/resolve/main/Qwen2.5-7B.Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "Qwen2.5-7B.Q4_K_M.gguf")
             )
+
         )
 
         setContent {
