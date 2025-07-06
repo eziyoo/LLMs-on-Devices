@@ -15,33 +15,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+// ✅ Import custom bubble colors from Color.kt
+import com.example.llama.ui.theme.UserBubbleColor
+import com.example.llama.ui.theme.UserTextColor
+import com.example.llama.ui.theme.ModelBubbleColor
+import com.example.llama.ui.theme.ModelTextColor
+
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primaryContainer = UserBubbleColor,
+    onPrimaryContainer = UserTextColor,
+    secondaryContainer = ModelBubbleColor,
+    onSecondaryContainer = ModelTextColor
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primaryContainer = UserBubbleColor,
+    onPrimaryContainer = UserTextColor,
+    secondaryContainer = ModelBubbleColor,
+    onSecondaryContainer = ModelTextColor
 )
 
 @Composable
 fun LlamaAndroidTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,6 +50,7 @@ fun LlamaAndroidTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
