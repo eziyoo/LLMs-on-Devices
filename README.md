@@ -1,6 +1,6 @@
 # 🧠 LlamaAndroid: On-Device LLM Inference for Android
 
-Welcome to the official repository for my thesis project: **on-device large language model inference using Llama.cpp on Android**. This project explores the feasibility, performance, and usability of running quantized LLMs natively on Android devices — with no server-side dependency.
+Welcome to the official repository for device LLMs project: **on-device large language model inference using Llama.cpp on Android**. This project explores the feasibility, performance, and usability of running quantized LLMs natively on Android devices — with no server-side dependency.
 
 ---
 
@@ -20,11 +20,11 @@ This setup is designed to help evaluate the **efficiency and limitations of loca
 
 ```
 thesis-repo/
-├── app/                  # Android app code (Jetpack Compose UI)
-├── native/llama.cpp/     # Git submodule: forked llama.cpp backend
-├── figures/              # Thesis figures and visual assets
-├── build.gradle          # Root Gradle config
-└── README.md             # You're here!
+├── android-app                           # Android app code (Jetpack Compose UI)
+├── figures                               # Figures and visual assets
+├── benchmark dataset downloader          # A script for downloading HuggingFace datasets
+├── hugging face GGUF Models extract      # A extracter of GGUF models
+└── README.md                             # You're here!
 ```
 
 ---
@@ -34,7 +34,7 @@ thesis-repo/
 ### 1. Clone with Submodule
 
 ```bash
-git clone --recurse-submodules https://github.com/your-username/thesis-repo.git
+git clone https://github.com/your-username/thesis-repo.git
 cd thesis-repo
 ```
 
@@ -54,7 +54,7 @@ cd thesis-repo
 
 ## 🧪 Models Included
 
-The app includes downloadable links to quantized versions of:
+The app includes downloadable links to quantized versions of(update continuously):
 
 - ✅ Phi-2 7B (Q4_0)
 - ✅ TinyLlama 1.1B (f16)
@@ -93,10 +93,9 @@ My thesis explores:
 
 ## 🙋‍♂️ Author
 
-**Ehsaan I.**  
-Thesis candidate @ [Your University]  
-📧 [your-email@example.com]  
-🔗 [your-linkedin-or-website.com]
+**M. Ehsani**  
+[Università degli Studi di Napoli Federico II]    
+🔗 [www.linkedin.com/in/eziyo]
 
 ---
 
