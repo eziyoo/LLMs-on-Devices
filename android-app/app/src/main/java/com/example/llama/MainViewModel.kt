@@ -10,7 +10,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instance()): ViewModel() {
+data class ChatMessage(val text: String, val isUser: Boolean)
+
+class MainViewModel(
+    private val llamaAndroid: LLamaAndroid = LLamaAndroid.instance()
+) : ViewModel() {
     companion object {
         @JvmStatic
         private val NanosPerSecond = 1_000_000_000.0
@@ -18,7 +22,7 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
 
     private val tag: String? = this::class.simpleName
 
-    var messages by mutableStateOf(listOf("Initializing..."))
+    var messages by mutableStateOf(listOf(ChatMessage("Initializing...", isUser = false)))
         private set
 
     var message by mutableStateOf("")
@@ -31,7 +35,7 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
             try {
                 llamaAndroid.unload()
             } catch (exc: IllegalStateException) {
-                messages += exc.message!!
+                messages += ChatMessage(exc.message ?: "Error unloading model", isUser = false)
             }
         }
     }
@@ -40,17 +44,22 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
         val text = message
         message = ""
 
-        // Add to messages console.
-        messages += text
-        messages += ""
+        // Add user message and a placeholder for model response
+        messages += ChatMessage(text, isUser = true)
+        messages += ChatMessage("", isUser = false)
 
         viewModelScope.launch {
             llamaAndroid.send(text)
                 .catch {
                     Log.e(tag, "send() failed", it)
-                    messages += it.message!!
+                    messages += ChatMessage(it.message ?: "Error", isUser = false)
                 }
-                .collect { messages = messages.dropLast(1) + (messages.last() + it) }
+                .collect {
+                    val updated = messages.dropLast(1).toMutableList()
+                    val last = messages.last().text + it
+                    updated += ChatMessage(last, isUser = false)
+                    messages = updated
+                }
         }
     }
 
@@ -61,20 +70,20 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
                 val warmupResult = llamaAndroid.bench(pp, tg, pl, nr)
                 val end = System.nanoTime()
 
-                messages += warmupResult
+                messages += ChatMessage(warmupResult, isUser = false)
 
                 val warmup = (end - start).toDouble() / NanosPerSecond
-                messages += "Warm up time: $warmup seconds, please wait..."
+                messages += ChatMessage("Warm up time: $warmup seconds, please wait...", isUser = false)
 
                 if (warmup > 5.0) {
-                    messages += "Warm up took too long, aborting benchmark"
+                    messages += ChatMessage("Warm up took too long, aborting benchmark", isUser = false)
                     return@launch
                 }
 
-                messages += llamaAndroid.bench(512, 128, 1, 3)
+                messages += ChatMessage(llamaAndroid.bench(512, 128, 1, 3), isUser = false)
             } catch (exc: IllegalStateException) {
                 Log.e(tag, "bench() failed", exc)
-                messages += exc.message!!
+                messages += ChatMessage(exc.message ?: "Benchmark failed", isUser = false)
             }
         }
     }
@@ -83,10 +92,10 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
         viewModelScope.launch {
             try {
                 llamaAndroid.load(pathToModel)
-                messages += "Loaded $pathToModel"
+                messages += ChatMessage("Loaded $pathToModel", isUser = false)
             } catch (exc: IllegalStateException) {
                 Log.e(tag, "load() failed", exc)
-                messages += exc.message!!
+                messages += ChatMessage(exc.message ?: "Load failed", isUser = false)
             }
         }
     }
@@ -100,6 +109,6 @@ class MainViewModel(private val llamaAndroid: LLamaAndroid = LLamaAndroid.instan
     }
 
     fun log(message: String) {
-        messages += message
+        messages += ChatMessage(message, isUser = false)
     }
 }
