@@ -1,8 +1,8 @@
-# 🧠 LlamaAndroid: On-Device LLM Inference for Android
-
 <p align="center">
   <img src="https://github.com/ehsaani/LLMs-on-Devices/raw/main/figures/app_icon.png" alt="App Icon" width="200">
 </p>
+
+# 🧠 LlamaAndroid: On-Device LLM Inference for Android
 
 
 Welcome to the official repository for device LLMs project: **on-device large language model inference using Llama.cpp on Android**. This project explores the feasibility, performance, and usability of running quantized LLMs natively on Android devices — with no server-side dependency.
