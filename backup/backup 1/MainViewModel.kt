@@ -17,7 +17,6 @@ class MainViewModel(
 ) : ViewModel() {
     companion object {
         @JvmStatic
-
         private val NanosPerSecond = 1_000_000_000.0
     }
 

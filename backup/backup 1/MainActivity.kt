@@ -3,10 +3,9 @@
 package com.example.llama
 
 import android.app.ActivityManager
+import android.app.DownloadManager
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
@@ -14,7 +13,6 @@ import android.os.StrictMode.VmPolicy
 import android.text.format.Formatter
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,18 +24,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.documentfile.provider.DocumentFile
 import com.example.llama.ui.theme.LlamaAndroidTheme
 import java.io.File
 
 class MainActivity(
     activityManager: ActivityManager? = null,
+    downloadManager: DownloadManager? = null,
     clipboardManager: ClipboardManager? = null,
 ) : ComponentActivity() {
 
     private val activityManager by lazy { activityManager ?: getSystemService<ActivityManager>()!! }
+    private val downloadManager by lazy { downloadManager ?: getSystemService<DownloadManager>()!! }
     private val clipboardManager by lazy { clipboardManager ?: getSystemService<ClipboardManager>()!! }
 
     private val viewModel: MainViewModel by viewModels()
@@ -45,30 +43,6 @@ class MainActivity(
     private fun availableMemory(): ActivityManager.MemoryInfo {
         return ActivityManager.MemoryInfo().also { activityManager.getMemoryInfo(it) }
     }
-
-    private val prefName = "llama_prefs"
-    private val keyUri = "models_uri"
-
-    private var models: List<Downloadable> = emptyList()
-
-    private val folderPicker =
-        registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri: Uri? ->
-            if (uri != null) {
-                // Persist permission
-                contentResolver.takePersistableUriPermission(
-                    uri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                )
-                getSharedPreferences(prefName, Context.MODE_PRIVATE).edit {
-                    putString(keyUri, uri.toString())
-                }
-                viewModel.log("✅ Folder selected: $uri")
-                models = loadModelsFromUri(uri)
-                setContentUI()
-            } else {
-                viewModel.log("❌ No folder selected")
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,59 +57,58 @@ class MainActivity(
         val total = Formatter.formatFileSize(this, availableMemory().totalMem)
 
         viewModel.log("Current memory: $free / $total")
-        viewModel.log("Scanning for models...")
+        viewModel.log("Downloads directory: ${getExternalFilesDir(null)}")
 
-        val savedUri = getSharedPreferences(prefName, Context.MODE_PRIVATE)
-            .getString(keyUri, null)
+        val extFilesDir = getExternalFilesDir(null)
 
-        if (savedUri != null) {
-            val uri = Uri.parse(savedUri)
-            models = loadModelsFromUri(uri)
-            if (models.isEmpty()) {
-                viewModel.log("⚠️ No .gguf files found, please reselect folder")
-                folderPicker.launch(null)
-            } else {
-                viewModel.log("✅ Using saved folder: $savedUri")
-                setContentUI()
-            }
-        } else {
-            viewModel.log("Please select the Thesis/models folder")
-            folderPicker.launch(null)
-        }
-    }
-
-    private fun loadModelsFromUri(uri: Uri): List<Downloadable> {
-        val docTree = DocumentFile.fromTreeUri(this, uri)
-        if (docTree == null || !docTree.isDirectory) {
-            viewModel.log("❌ Invalid folder")
-            return emptyList()
-        }
-
-        val files = docTree.listFiles().filter {
-            it.isFile && (it.name?.endsWith(".gguf") == true)
-        }
-
-        if (files.isEmpty()) {
-            viewModel.log("⚠️ No .gguf files found in folder")
-        } else {
-            viewModel.log("Found ${files.size} model(s)")
-        }
-
-        return files.map { file ->
-            val f = File("/dummy/path/${file.name}")
+        val models = listOf(
             Downloadable(
-                name = file.name ?: "unknown",
-                destination = f,
-                uri = file.uri
+                "qwen2.5-1.5b-instruct (Q4_K_M, 1.12 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-1.5b-instruct-q4_k_m.gguf")
+            ),
+            Downloadable(
+                "phi-2 (Q4_K_M, 1.79 GB)",
+                Uri.parse("https://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "phi-2.Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "qwen2.5-3b-instruct (Q4_K_M, 2.1 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-3b-instruct-q4_k_m.gguf")
+            ),
+            Downloadable(
+                "OLMoE-1B-7B-0125-Instruct (Q4_K_M, 4.21 GB)",
+                Uri.parse("https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct-GGUF/resolve/main/OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "qwen2.5-7b-instruct (Q4_K_M, 3.99 GB)",
+                Uri.parse("https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf?download=true"),
+                File(extFilesDir, "qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf")
+            ),
+            Downloadable(
+                "Meta-Llama-3.1-8B-Instruct (Q4_K_M, 4.92 GB)",
+                Uri.parse("https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "gemma-2-9b-it (Q4_K_M, 5.76 GB)",
+                Uri.parse("https://huggingface.co/bartowski/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "gemma-2-9b-it-Q4_K_M.gguf")
+            ),
+            Downloadable(
+                "Qwen2.5-7B.Q4_K_M.gguf (Q4_K_M, 4.68 GB)",
+                Uri.parse("https://huggingface.co/QuantFactory/Qwen2.5-7B-GGUF/resolve/main/Qwen2.5-7B.Q4_K_M.gguf?download=true"),
+                File(extFilesDir, "Qwen2.5-7B.Q4_K_M.gguf")
             )
-        }
-    }
 
-    private fun setContentUI() {
+        )
+
         setContent {
             LlamaAndroidTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    MainCompose(viewModel, clipboardManager, models)
+                    MainCompose(viewModel, clipboardManager, downloadManager, models)
                 }
             }
         }
@@ -146,6 +119,7 @@ class MainActivity(
 fun MainCompose(
     viewModel: MainViewModel,
     clipboard: ClipboardManager,
+    dm: DownloadManager,
     models: List<Downloadable>
 ) {
     Column(
@@ -153,24 +127,16 @@ fun MainCompose(
             .fillMaxSize()
             .padding(8.dp)
     ) {
-        val listState = rememberLazyListState()
-        val messages = viewModel.messages
-
-        // 👇 Auto-scroll to bottom on new message
-        LaunchedEffect(messages.size) {
-            if (messages.isNotEmpty()) {
-                listState.animateScrollToItem(messages.lastIndex)
-            }
-        }
+        val scrollState = rememberLazyListState()
 
         LazyColumn(
-            state = listState,
-            reverseLayout = false, // 👈 Normal order (top → bottom)
+            state = scrollState,
+            reverseLayout = true,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            items(messages) { message ->
+            items(viewModel.messages.reversed()) { message ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -184,7 +150,8 @@ fun MainCompose(
                             MaterialTheme.colorScheme.secondaryContainer,
                         shape = MaterialTheme.shapes.medium,
                         tonalElevation = 2.dp,
-                        modifier = Modifier.widthIn(max = 280.dp)
+                        modifier = Modifier
+                            .widthIn(max = 280.dp)
                     ) {
                         Text(
                             text = message.text.trim(),
@@ -227,7 +194,7 @@ fun MainCompose(
             Button(onClick = {
                 clipboard.setPrimaryClip(
                     ClipData.newPlainText(
-                        "Chat Transcript",
+                        "",
                         viewModel.messages.joinToString("\n") { it.text }
                     )
                 )
@@ -236,56 +203,55 @@ fun MainCompose(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ModelDropdownMenu(models, viewModel)
+        ModelDropdownMenu(models, viewModel, dm)
     }
 }
 
 @Composable
 fun ModelDropdownMenu(
     models: List<Downloadable>,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    dm: DownloadManager
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedModel by remember { mutableStateOf<Downloadable?>(null) }
 
-    Column {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
-            OutlinedTextField(
-                readOnly = true,
-                value = selectedModel?.name ?: "Select a model",
-                onValueChange = {},
-                label = { Text("Model") },
-                modifier = Modifier
-                    .menuAnchor()
-                    .fillMaxWidth(),
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                }
-            )
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = selectedModel?.name ?: "Select a model",
+            onValueChange = {},
+            label = { Text("Model") },
+            modifier = Modifier
+                .menuAnchor()
+                .fillMaxWidth(),
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            }
+        )
 
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                models.forEach { model ->
-                    DropdownMenuItem(
-                        text = { Text(model.name) },
-                        onClick = {
-                            selectedModel = model
-                            expanded = false
-                        }
-                    )
-                }
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            models.forEach { model ->
+                DropdownMenuItem(
+                    text = { Text(model.name) },
+                    onClick = {
+                        selectedModel = model
+                        expanded = false
+                    }
+                )
             }
         }
+    }
 
-        Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(8.dp))
 
-        selectedModel?.let { model ->
-            Downloadable.Button(viewModel, model)
-        }
+    selectedModel?.let {
+        Downloadable.Button(viewModel, dm, it)
     }
 }
