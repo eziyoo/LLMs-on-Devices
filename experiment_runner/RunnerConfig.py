@@ -7,7 +7,18 @@ from ConfigValidator.Config.Models.OperationType import OperationType
 from ExtendedTyping.Typing import SupportsStr
 from ProgressManager.Output.OutputProcedure import OutputProcedure as output
 
-from typing import Dict, List, Any, Optional
+from datasets import load_dataset
+from evaluate import load
+from transformers import (
+    AutoTokenizer,
+    AutoModelForSeq2SeqLM,
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoModelForQuestionAnswering
+)
+import torch
+import time
+from typing import Dict, Optional
 from pathlib import Path
 from os.path import dirname, realpath
 
@@ -16,23 +27,11 @@ class RunnerConfig:
     ROOT_DIR = Path(dirname(realpath(__file__)))
 
     # ================================ USER SPECIFIC CONFIG ================================
-    """The name of the experiment."""
-    name:                       str             = "new_runner_experiment"
+    name: str = "LLMs_on_device"
+    results_output_path: Path = ROOT_DIR / 'experiments'
+    operation_type: OperationType = OperationType.AUTO
+    time_between_runs_in_ms: int = 20000
 
-    """The path in which Experiment Runner will create a folder with the name `self.name`, in order to store the
-    results from this experiment. (Path does not need to exist - it will be created if necessary.)
-    Output path defaults to the config file's path, inside the folder 'experiments'"""
-    results_output_path:        Path            = ROOT_DIR / 'experiments'
-
-    """Experiment operation type. Unless you manually want to initiate each run, use `OperationType.AUTO`."""
-    operation_type:             OperationType   = OperationType.AUTO
-
-    """The time Experiment Runner will wait after a run completes.
-    This can be essential to accommodate for cooldown periods on some systems."""
-    time_between_runs_in_ms:    int             = 1000
-
-    # Dynamic configurations can be one-time satisfied here before the program takes the config as-is
-    # e.g. Setting some variable based on some criteria
     def __init__(self):
         """Executes immediately after program start, on config load"""
 
