@@ -51,18 +51,28 @@ class RunnerConfig:
         output.console_log("Custom config loaded")
 
     def create_run_table_model(self) -> RunTableModel:
-        """Create and return the run_table model here. A run_table is a List (rows) of tuples (columns),
-        representing each run performed"""
-        factor1 = FactorModel("example_factor1", ['example_treatment1', 'example_treatment2', 'example_treatment3'])
-        factor2 = FactorModel("example_factor2", [True, False])
-        self.run_table_model = RunTableModel(
-            factors=[factor1, factor2],
-            exclude_combinations=[
-                {factor1: ['example_treatment1']},                   # all runs having treatment "example_treatment1" will be excluded
-                {factor1: ['example_treatment2'], factor2: [True]},  # all runs having the combination ("example_treatment2", True) will be excluded
-            ],
-            data_columns=['avg_cpu', 'avg_mem']
-        )
+        """ Run table : A list (rows) of tuples (columns), where each tuple is one experiment run."""
+
+        model_factor = FactorModel(
+            "Model", [
+            "qwen2-0_5b-instruct-q4_k_m.gguf",
+            "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            "phi-2.Q4_K_M.gguf",
+            "qwen2.5-3b-instruct-q4_k_m.gguf",
+            "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf",
+            "qwen2.5-7b-instruct-q4_k_m.gguf",
+            "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+            "gemma-2-9b-it-Q4_K_M.gguf",
+        ])
+
+        task_factor = FactorModel("task", [
+            "text_generation",
+            "question_answering",
+            "text_classification",
+            "summarization",
+            "translation"
+        ])
+
         return self.run_table_model
 
     def before_experiment(self) -> None:
