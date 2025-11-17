@@ -15,11 +15,30 @@ from ProgressManager.Output.OutputProcedure import OutputProcedure as output
 
 
 TASK_SPECS = {
-
+    "text_generation": {
+        "dataset": "wikitext_2",
+        "metric": "bertscore",
+        "prompt_template": "Continue the following text:\n{input}\n"
+    },
+    "question_answering": {
+        "dataset": "SQuAD",
+        "metric": "bertscore",
+        "prompt_template": "Answer the question based on context:\nContext: {context}\nQuestion: {question}\nAnswer:"
+    },
+    "text_classification": {
+        "dataset": "SST_2",
+        "metric": "auc_roc",
+        "prompt_template": "Classify the sentiment as positive or negative.\nText: {input}\nSentiment:"
+    },
     "summarization": {
         "dataset": "CNN_DailyMail",
         "metric": "bertscore",
         "prompt_template": "Summarize the following news article:\n{input}\nSummary:"
+    },
+    "translation": {
+        "dataset": "WMT19",
+        "metric": "comet",
+        "prompt_template": "Translate this English sentence into German:\n{input}\nGerman:"
     }
 }
 
@@ -78,7 +97,14 @@ class RunnerConfig:
     def create_run_table_model(self) -> RunTableModel:
 
         model_factor = FactorModel("model", [
-            "qwen2-0_5b-instruct-q4_k_m.gguf"
+            "qwen2-0_5b-instruct-q4_k_m.gguf",
+            "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            "phi-2.Q4_K_M.gguf",
+            "qwen2.5-3b-instruct-q4_k_m.gguf",
+            "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf",
+            "qwen2.5-7b-instruct-q4_k_m.gguf",
+            "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+            "gemma-2-9b-it-Q4_K_M.gguf"
         ])
 
         task_factor = FactorModel("task", list(TASK_SPECS.keys()))
@@ -111,12 +137,9 @@ class RunnerConfig:
     def before_experiment(self):
         output.console_log("Pushing llama binaries and models to device…")
 
-        subprocess.run("adb push /home/ez/projects/llama.cpp/build-android/bin/llama-cli /data/local/tmp/", shell=True)
-        subprocess.run("adb push /home/ez/projects/llama.cpp/build-android/bin/lib*.so /data/local/tmp/", shell=True)
-        # subprocess.run("adb push /mnt/d/UNI/Thesis/script/models/*.gguf /data/local/tmp", shell=True)
-        subprocess.run("adb shell mkdir -p /data/local/tmp/models", shell=True)
-        subprocess.run("adb push /mnt/d/UNI/Thesis/script/models/qwen2-0_5b-instruct-q4_k_m.gguf /data/local/tmp/models/", shell=True)
-
+        subprocess.run("adb push build-android/bin/llama-cli /data/local/tmp/", shell=True)
+        subprocess.run("adb push build-android/bin/lib*.so /data/local/tmp/", shell=True)
+        subprocess.run("adb push models/*.gguf /data/local/tmp/models/", shell=True)
         subprocess.run("adb shell chmod +x /data/local/tmp/llama-cli", shell=True)
 
     # ==========================================================
@@ -129,73 +152,73 @@ class RunnerConfig:
     # START RUN
     # ==========================================================
     def start_run(self, context: RunnerContext):
-        output.console_log(
-            f"Starting run {context.run_nr} | Factors: {context.execute_run}"
-        )
-
-
+        output.console_log(f"Starting run: {context.current_run_name}")
 
     # ==========================================================
     # MAIN INFERENCE LOOP (50 SAMPLES)
     # ==========================================================
-    
     def interact(self, context: RunnerContext):
-        run = context.execute_run
+        run = context.current_run
         model = run["model"]
         task = run["task"]
         threads = run["threads"]
 
         task_spec = TASK_SPECS[task]
-        df = self.load_parquet_samples(task_spec["dataset"], 5)  # use small subset for debugging
+
+        df = self.load_parquet_samples(task_spec["dataset"], 50)
 
         all_results = []
 
         for _, row in df.iterrows():
-            # Build prompt
+
+            # Build prompts by task
             if task == "summarization":
                 input_text = row["article"]
                 reference = row["highlights"]
+
             elif task == "translation":
                 input_text = row["en"]
                 reference = row["de"]
+
             elif task == "text_classification":
                 input_text = row["sentence"]
                 reference = row["label"]
+
             elif task == "question_answering":
                 input_text = None
                 context_text = row["context"]
                 question = row["question"]
                 reference = row["answer"]
+
                 prompt = task_spec["prompt_template"].format(
                     context=context_text, question=question
                 )
-            else:
+
+            else:  # text generation
                 input_text = row["text"]
                 reference = None
 
             if input_text is not None:
                 prompt = task_spec["prompt_template"].format(input=input_text)
 
-            # *** IMPORTANT: escape quotes for adb shell ***
-            safe_prompt = prompt.replace('"', '\\"')
+            # Push prompt to device
+            with open("/tmp/prompt.txt", "w") as f:
+                f.write(prompt)
+            subprocess.run("adb push /tmp/prompt.txt /data/local/tmp/prompt.txt", shell=True)
 
-            # Run inference WITHOUT --prompt-file
+            # Run inference
             adb_cmd = (
                 f'adb shell "cd /data/local/tmp && '
-                f'echo \\\"{safe_prompt}\\\" | '
                 f'LD_LIBRARY_PATH=. ./llama-cli '
-                f'-m /data/local/tmp/{model} '
+                f'-m models/{model} '
                 f'-t {threads} '
-                f'-n 128"'
+                f'--prompt-file prompt.txt '
+                f'--n-predict 128"'
             )
 
             start = time.time()
             raw_output = subprocess.getoutput(adb_cmd)
             end = time.time()
-
-            print("=== RAW DEVICE OUTPUT ===")
-            print(raw_output)
-            print("=== END OUTPUT ===")
 
             all_results.append({
                 "raw": raw_output,
@@ -204,8 +227,7 @@ class RunnerConfig:
                 "prompt": prompt
             })
 
-        context.execute_run["samples"] = all_results
-
+        context.experiment_data["samples"] = all_results
 
     # ==========================================================
     # METRIC EXTRACTION HELPERS
@@ -226,75 +248,41 @@ class RunnerConfig:
     def get_system_metrics(self):
         metrics = {}
 
-        # ---------- CPU % ----------
+        # CPU %
         cpu_raw = subprocess.getoutput('adb shell top -b -n 1 | grep llama')
         cpu_vals = re.findall(r'\s(\d+)%\s', cpu_raw)
         metrics["cpu_usage"] = int(cpu_vals[0]) if cpu_vals else None
 
-        # ---------- RAM (KB) ----------
-        pid = subprocess.getoutput("adb shell pidof llama-cli").strip()
-        peak_ram_kb = None
-        if pid:
-            meminfo = subprocess.getoutput(f"adb shell dumpsys meminfo {pid}")
-            rss = re.search(r"TOTAL:\s+(\d+)", meminfo)
-            if rss:
-                try:
-                    peak_ram_kb = int(rss.group(1))
-                except ValueError:
-                    peak_ram_kb = None
-        metrics["peak_ram_kb"] = peak_ram_kb
+        # RAM
+        pid = subprocess.getoutput("adb shell pidof llama-cli")
+        meminfo = subprocess.getoutput(f"adb shell dumpsys meminfo {pid}")
+        rss = re.search(r"TOTAL:\s+(\d+)", meminfo)
+        metrics["peak_ram_kb"] = int(rss.group(1)) if rss else None
 
-        # ---------- Battery temperature (°C) ----------
-        temp_raw = subprocess.getoutput("adb shell dumpsys battery | grep temperature").strip()
+        # Temp
+        temp_raw = subprocess.getoutput("adb shell dumpsys battery | grep temperature")
         t = re.findall(r"(\d+)", temp_raw)
-        if t:
-            try:
-                metrics["battery_temp_c"] = float(t[0]) / 10.0
-            except ValueError:
-                metrics["battery_temp_c"] = None
-        else:
-            metrics["battery_temp_c"] = None
+        metrics["battery_temp_c"] = float(t[0]) / 10 if t else None
 
-        # Helper: safely parse a numeric from adb output
-        def safe_numeric(cmd, scale=1.0):
-            raw = subprocess.getoutput(cmd).strip()
-            # Extract first integer or float in the string
-            m = re.search(r"-?\d+\.?\d*", raw)
-            if not m:
-                return None
-            try:
-                val = float(m.group(0))
-                return val / scale
-            except ValueError:
-                return None
+        # Current (mA)
+        cur = subprocess.getoutput("adb shell cat /sys/class/power_supply/battery/current_now")
+        metrics["battery_current_ma"] = float(cur) / 1000 if cur else None
 
-        # ---------- Current (mA) ----------
-        # /sys/.../current_now is often permission protected -> handle gracefully
-        metrics["battery_current_ma"] = safe_numeric(
-            "adb shell cat /sys/class/power_supply/battery/current_now",
-            scale=1000.0  # usually in µA
-        )
+        # Voltage (V)
+        volt = subprocess.getoutput("adb shell cat /sys/class/power_supply/battery/voltage_now")
+        metrics["battery_voltage_v"] = float(volt) / 1_000_000 if volt else None
 
-        # ---------- Voltage (V) ----------
-        metrics["battery_voltage_v"] = safe_numeric(
-            "adb shell cat /sys/class/power_supply/battery/voltage_now",
-            scale=1_000_000.0  # usually in µV
-        )
-
-        # ---------- Thermal throttling freq (MHz) ----------
-        metrics["thermal_throttle_freq_mhz"] = safe_numeric(
-            "adb shell cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq",
-            scale=1000.0  # kHz -> MHz
-        )
+        # Thermal throttling
+        freq = subprocess.getoutput("adb shell cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")
+        metrics["thermal_throttle_freq_mhz"] = int(freq) / 1000 if freq else None
 
         return metrics
-
 
     # ==========================================================
     # POPULATE RUN DATA (AGGREGATE OVER 50 SAMPLES)
     # ==========================================================
     def populate_run_data(self, context: RunnerContext) -> Optional[Dict[str, Any]]:
-        samples = context.execute_run["samples"]
+        samples = context.experiment_data["samples"]
 
         tps_values = []
         latency_values = []
@@ -308,39 +296,30 @@ class RunnerConfig:
 
             tps, pre, dec, ttft = self.parse_llama_output(raw)
 
-            if tps is not None:
-                tps_values.append(tps)
-            if pre is not None:
-                prefill_values.append(pre)
-            if dec is not None:
-                decode_values.append(dec)
-            if ttft is not None:
-                ttft_values.append(ttft)
+            if tps: tps_values.append(tps)
+            if pre: prefill_values.append(pre)
+            if dec: decode_values.append(dec)
+            if ttft: ttft_values.append(ttft)
 
             latency_values.append(duration * 1000)
 
-        # -------- SAFE AGGREGATION --------
-        def safe_mean(values):
-            return sum(values) / len(values) if values else 0
-
-        mean_tps = safe_mean(tps_values)
-        mean_latency = safe_mean(latency_values)
-        mean_prefill = safe_mean(prefill_values)
-        mean_decode = safe_mean(decode_values)
-        mean_ttft = safe_mean(ttft_values)
+        # Aggregate
+        mean_tps = sum(tps_values) / len(tps_values)
+        mean_latency = sum(latency_values) / len(latency_values)
+        mean_prefill = sum(prefill_values) / len(prefill_values)
+        mean_decode = sum(decode_values) / len(decode_values)
+        mean_ttft = sum(ttft_values) / len(ttft_values)
 
         # System metrics (single snapshot)
         sys_metrics = self.get_system_metrics()
 
-        # Energy calculation (avoid crashes)
-        current_ma = sys_metrics.get("battery_current_ma") or 0
-        voltage_v = sys_metrics.get("battery_voltage_v") or 0
-
-        current_a = current_ma / 1000
+        # Energy calculation
+        current_a = sys_metrics["battery_current_ma"] / 1000
+        voltage_v = sys_metrics["battery_voltage_v"]
         total_s = mean_latency / 1000
 
         joules = current_a * voltage_v * total_s
-        energy_per_token = joules / mean_tps if mean_tps > 0 else 0
+        energy_per_token = joules / max(mean_tps, 1)
 
         return {
             "tps": mean_tps,
@@ -352,7 +331,6 @@ class RunnerConfig:
             "energy_joules": joules,
             "energy_per_token": energy_per_token
         }
-
 
     # ==========================================================
     # AFTER EXPERIMENT

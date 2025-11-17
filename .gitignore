@@ -1,0 +1,31 @@
+# Experiment outputs
+experiment_runner/experiments/
+experiment_runner/datasets/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environment
+venv/
+.env/
+
+# ML artifacts
+*.log
+*.ckpt
+*.h5
+*.pth
+*.pt
+models/
+outputs/
+
+# VSCode and IDE settings
+.vscode/
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
