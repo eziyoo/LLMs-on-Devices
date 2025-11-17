@@ -62,7 +62,7 @@ class RunnerConfig:
             (RunnerEvents.AFTER_EXPERIMENT,  self.after_experiment),
         ])
         self.run_table_model = None
-        output.console_log("Loaded Full LLM Experiment Runner Configuration.")
+        output.console_log("Loaded Full LLM Experiment Runner Configuration")
 
     # ================================================================
     #        DEFINE RUN TABLE MODEL (TASK × MODEL)
