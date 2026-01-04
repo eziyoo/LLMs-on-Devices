@@ -25,7 +25,7 @@ class RunnerConfig:
 
     # --- Device & ADB Settings ---
     ADB_PATH = "adb" 
-    DEVICE_ID = "192.168.43.227:5555"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
+    DEVICE_ID = "R5CY50M8TDM"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
     REMOTE_DIR = "/data/local/tmp"
     BINARY_NAME = "llama-cli"
     
