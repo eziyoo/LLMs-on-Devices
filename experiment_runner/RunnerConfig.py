@@ -31,7 +31,7 @@ class RunnerConfig:
     
     # --- Local Paths ---
     LOCAL_LLAMA_BUILD = os.path.expanduser("~/llm_on_device/llama.cpp/build-android/bin")
-    LOCAL_MODEL_PATH = "/mnt/d/GoogleDriveMirror/UNI/Thesis/Files/script/models/qwen2-0_5b-instruct-q4_k_m.gguf"
+    LOCAL_MODEL_PATH = "/mnt/d/GoogleDriveMirror/UNI/Thesis/Files/script/models"
 
     def __init__(self):
         EventSubscriptionController.subscribe_to_multiple_events([
@@ -51,11 +51,22 @@ class RunnerConfig:
 
     def create_run_table_model(self) -> RunTableModel:
         # Define Factors
-        factor_model = FactorModel("model_file", ["qwen2-0_5b-instruct-q4_k_m.gguf"])
+        factor_model = FactorModel("model_file", 
+                                   [
+                                       "qwen2-0_5b-instruct-q4_k_m.gguf",
+                                       "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+                                       "phi-2.Q4_K_M.gguf",
+                                       "qwen2.5-3b-instruct-q4_k_m.gguf",
+                                       "qwen2.5-7b-instruct-q4_k_m.gguf",
+                                       "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf",
+                                       "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+                                       "gemma-2-9b-it-Q4_K_M.gguf"
+                                   ]
+                                   )
         
         self.run_table_model = RunTableModel(
             factors=[factor_model],
-            repetitions=50,
+            repetitions=2,
             data_columns=[
                 'model_response',
                 'prompt_prefill_speed',     # t/s
@@ -84,51 +95,44 @@ class RunnerConfig:
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell settings put system screen_off_timeout 2147483647", shell=True)
 
         # --- SMART FILE SYNC ---
-        # Create a list of all files we need on the device
         files_to_sync = []
 
-        # A. Find all local library files (lib*.so) using glob
+        # A. Find all local library files (lib*.so)
         if os.path.exists(self.LOCAL_LLAMA_BUILD):
             lib_files = glob.glob(os.path.join(self.LOCAL_LLAMA_BUILD, "lib*.so"))
             files_to_sync.extend(lib_files)
-            
-            # B. Add the main binary (llama-cli)
             files_to_sync.append(os.path.join(self.LOCAL_LLAMA_BUILD, self.BINARY_NAME))
         else:
              output.console_log(f"--> WARNING: Local build path not found: {self.LOCAL_LLAMA_BUILD}")
 
-        # C. Add the Model file
-        files_to_sync.append(self.LOCAL_MODEL_PATH)
+        # B. Add ALL Model files from the directory (So they are ready for the main experiment)
+        if os.path.isdir(self.LOCAL_MODEL_PATH):
+            model_files = glob.glob(os.path.join(self.LOCAL_MODEL_PATH, "*.gguf"))
+            if not model_files:
+                output.console_log(f"--> WARNING: No .gguf files found in {self.LOCAL_MODEL_PATH}")
+            files_to_sync.extend(model_files)
+        else:
+            files_to_sync.append(self.LOCAL_MODEL_PATH)
         
         output.console_log(f"--> [SYNC] Verifying {len(files_to_sync)} files on device...")
 
-        # Loop through every file and check if it exists on the phone
+        # Loop through every file to sync
         for local_path in files_to_sync:
-            # Extract just the filename (e.g., "libggml.so" or "model.gguf")
             filename = os.path.basename(local_path)
             remote_path = f"{self.REMOTE_DIR}/{filename}"
             
-            # ADB Command: Check if file exists ([ -f path ])
-            # Returns 0 if found, 1 if missing
+            # Check if file exists on device
             check_cmd = f"{self.ADB_PATH} -s {self.DEVICE_ID} shell [ -f \"{remote_path}\" ]"
-            
-            # Run silently (stdout/stderr to DEVNULL)
             result = subprocess.run(check_cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             if result.returncode == 0:
                 output.console_log(f"    [SKIP] Found {filename} on device.")
             else:
                 output.console_log(f"    [PUSH] Pushing {filename}...")
-                # Push the file (using quotes for safety)
                 subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} push \"{local_path}\" {self.REMOTE_DIR}/", shell=True)
 
-        # 4. Make binary executable (Always run this to be safe)
+        # 4. Make binary executable
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell chmod +x {self.REMOTE_DIR}/{self.BINARY_NAME}", shell=True)
-
-        # 5. Launch Spy App
-        #output.console_log("    Launching BatteryManager App...")
-        #subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell am start -n \"com.example.batterymanager_utility/com.example.batterymanager_utility.MainActivity\" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER", shell=True)
-        #time.sleep(2)
 
         # 6. Grant Permissions
         output.console_log("    Granting permissions...")
@@ -136,30 +140,23 @@ class RunnerConfig:
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell dumpsys deviceidle whitelist +com.example.batterymanager_utility", shell=True)
 
         # 7. Warm-Up phase
-        output.console_log("--> [WARMUP] Running one inference pass to warm up caches...")
+        WARMUP_MODEL = "qwen2-0_5b-instruct-q4_k_m.gguf"
         
-        # Extract the model filename from your local path
-        model_filename = os.path.basename(self.LOCAL_MODEL_PATH)
         warmup_prompt = "Write a story about a robot."
-        
-        # Construct the command
-        # Note: We send output to /dev/null because we don't need to save the warm-up story
         cmd = (
             f"cd {self.REMOTE_DIR} && "
             f"LD_LIBRARY_PATH=. ./llama-cli "
-            f"-m {model_filename} "
+            f"-m {WARMUP_MODEL} "
             f"-p '{warmup_prompt}' "
-            f"-st "                  # Single-turn mode
-            f"-n 128 "               # Same token limit as experiment
-            f"-c 2048 -t 8 --temp 0 " # Default to 8 threads (same as your logic)
-            f"> /dev/null 2>&1"      # Discard output to keep logs clean
+            f"-st "
+            f"-n 128 "
+            f"-c 2048 -t 8 --temp 0 "
+            f"> /dev/null 2>&1"
         )
-
-        # Run the command
+        
+        # Execute
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell \"{cmd}\"", shell=True)
         output.console_log("--> [WARMUP] Done.")
-
-        
 
         output.console_log("--> [SETUP] Done.")
 

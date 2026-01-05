@@ -6,8 +6,8 @@ import re
 
 # --- CONFIGURATION ---
 ADB_PATH = "adb"
-DEVICE_ID = "192.168.43.227:5555"  # Samsung S25 Ultra
-DURATION_SEC = 3600        # 30 Minutes
+DEVICE_ID = "192.168.43.180:5555"  # Samsung S25 Ultra
+DURATION_SEC = 3600        # 60 Minutes
 REMOTE_DIR = "/data/local/tmp"
 
 def run_adb(cmd):
