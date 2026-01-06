@@ -14,6 +14,7 @@ import statistics
 import os
 import glob
 
+
 class RunnerConfig:
     ROOT_DIR = Path(dirname(realpath(__file__)))
     
@@ -21,11 +22,11 @@ class RunnerConfig:
     name = "s25_llama_thesis_experiment"
     results_output_path = ROOT_DIR / 'results'
     operation_type = OperationType.AUTO
-    time_between_runs_in_ms = 3000  # 3s cool-down between runs
+    time_between_runs_in_ms = 180000  # 3 min cool-down between runs
 
     # --- Device & ADB Settings ---
     ADB_PATH = "adb" 
-    DEVICE_ID = "R5CY50M8TDM"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
+    DEVICE_ID = "192.168.43.35:5555"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
     REMOTE_DIR = "/data/local/tmp"
     BINARY_NAME = "llama-cli"
     
@@ -66,7 +67,7 @@ class RunnerConfig:
         
         self.run_table_model = RunTableModel(
             factors=[factor_model],
-            repetitions=2,
+            repetitions=1,
             data_columns=[
                 'model_response',
                 'prompt_prefill_speed',     # t/s
@@ -80,6 +81,8 @@ class RunnerConfig:
                 'avg_power',                # Watts
                 'total_energy_consumption', # Joules
                 'energy_per_token',         # Joules/Token
+                'battery_capacity',         # Percentage
+                'battery_temperature'       # Celsius
             ]
         )
         return self.run_table_model
@@ -142,7 +145,7 @@ class RunnerConfig:
         # 7. Warm-Up phase
         WARMUP_MODEL = "qwen2-0_5b-instruct-q4_k_m.gguf"
         
-        warmup_prompt = "Write a story about a robot."
+        warmup_prompt = "Instruct: Write a story about a robot.\\nOutput:"
         cmd = (
             f"cd {self.REMOTE_DIR} && "
             f"LD_LIBRARY_PATH=. ./llama-cli "
@@ -167,12 +170,12 @@ class RunnerConfig:
     def start_measurement(self, context: RunnerContext) -> None:
         output.console_log("--> Starting BatteryManager Service...")
         # Start service to log 100ms intervals
-        # Note: We requested only CURRENT and VOLTAGE here
+        # Requesting CURRENT, VOLTAGE, CAPACITY, and TEMPERATURE
         cmd = (
             f"{self.ADB_PATH} -s {self.DEVICE_ID} shell am start-foreground-service "
             f"-n \"com.example.batterymanager_utility/com.example.batterymanager_utility.DataCollectionService\" "
             f"--ei sampleRate 100 "
-            f"--es \"dataFields\" \"BATTERY_PROPERTY_CURRENT_NOW,EXTRA_VOLTAGE\" "
+            f"--es \"dataFields\" \"BATTERY_PROPERTY_CURRENT_NOW,EXTRA_VOLTAGE,BATTERY_PROPERTY_CAPACITY,EXTRA_TEMPERATURE\" "
             f"--ez toCSV False"
         )
         subprocess.run(cmd, shell=True)
@@ -186,7 +189,7 @@ class RunnerConfig:
         # 1. Clean previous file
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell rm -f {remote_log_file}", shell=True)
 
-        prompt_text = "Write a story about a robot."
+        prompt_text = "Instruct: Write a story about a robot.\\nOutput:"
         
         # 2. Construct Command
         # FIX: Added '-t 8' to set default threads since variable was removed.
@@ -238,6 +241,8 @@ class RunnerConfig:
         power_readings = []
         currents_A = []
         voltages_V = []
+        capacities_pct = []
+        temps_c = []
         
         total_energy_joules = 0.0
         prev_time = None
@@ -256,25 +261,30 @@ class RunnerConfig:
                             ts = int(parts[0])
                             curr_raw = int(parts[1]) # Unit: µA (Micro)
                             volt_mV = int(parts[2])  # Unit: mV (Milli)
+                            cap_pct = int(parts[3])  # Unit: %
+                            temp_raw = int(parts[4]) # Unit: Tenths of °C
 
                             # --- UNIT CONVERSION ---
                             time_sec = ts / 1000.0
                             
-                            # Current: µA -> Amps (Divide by 1,000,000)
-                            current_A = abs(curr_raw) / 1000000.0 
-                            
-                            # Voltage: mV -> Volts (Divide by 1,000)
-                            voltage_V = volt_mV / 1000.0        
-
+                            # A. Current: µA -> Amps (Divide by 1,000,000)
                             # B. Subtract Baseline (Find Model's Draw)
                             # We use max(0, ...) to ensure we don't get negative power if noise dips below baseline
-                            current_A_n = max(0, current_A - 0.10)  
+                            current_A = max(0, (abs(curr_raw) / 1000000.0) - 0.10)
                             
-                            power_W = current_A_n * voltage_V
+                            # Voltage: mV -> Volts (Divide by 1,000)
+                            voltage_V = volt_mV / 1000.0
 
-                            currents_A.append(current_A_n)
+                            # Convert tenths to degrees
+                            temp_C_val = temp_raw / 10.0  
+                            
+                            power_W = current_A * voltage_V
+
+                            currents_A.append(current_A)
                             voltages_V.append(voltage_V)
                             power_readings.append(power_W)
+                            capacities_pct.append(cap_pct)
+                            temps_c.append(temp_C_val)
 
                             # Trapezoidal Integration
                             if prev_time is not None:
@@ -293,6 +303,8 @@ class RunnerConfig:
         avg_current = statistics.mean(currents_A) if currents_A else 0
         avg_voltage = statistics.mean(voltages_V) if voltages_V else 0
         avg_power = statistics.mean(power_readings) if power_readings else 0
+        avg_capacity = statistics.mean(capacities_pct) if capacities_pct else 0
+        avg_temp = statistics.mean(temps_c) if temps_c else 0
 
         # Energy Per Token
         gen_tokens = llama_metrics.get('output_tokens', 128)
@@ -312,6 +324,8 @@ class RunnerConfig:
             'avg_power': round(avg_power, 4),
             'total_energy_consumption': round(total_energy_joules, 4),
             'energy_per_token': round(energy_per_token, 4),
+            'battery_capacity': round(avg_capacity, 2),
+            'battery_temperature': round(avg_temp, 2)
         }
     
     def after_experiment(self):
@@ -342,7 +356,7 @@ class RunnerConfig:
             'inference_latency': 0.0,
             'ttft': 0.0,
             'output_tokens': 128,
-            'input_tokens': 8
+            'input_tokens': 13
         }
         
         p_match = re.search(r"Prompt:\s+(\d+\.\d+)\s+t/s", log_text)
@@ -361,41 +375,50 @@ class RunnerConfig:
         return data
 
     def _clean_story_from_logs(self, full_text):
-            """
-            Aggressively filters system logs, spinners, menus, and speed metrics.
-            """
-            clean_lines = []
+        """
+        Aggressively filters system logs, spinners, menus, speed metrics,
+        and chat prefixes (Assistant:, Output:, etc.).
+        """
+        clean_lines = []
+        
+        for line in full_text.split('\n'):
+            # 1. Skip System Info & Menu Commands
+            if any(x in line for x in [
+                "build ", "model ", "modalities :", "available commands:", 
+                "/exit", "/regen", "/clear", "/read", 
+                "llama_memory", "Exiting...", "Executing:", "Loading model..."
+            ]):
+                continue
             
-            for line in full_text.split('\n'):
-                # 1. Skip System Info & Menu Commands
-                if any(x in line for x in [
-                    "build ", "model ", "modalities :", "available commands:", 
-                    "/exit", "/regen", "/clear", "/read", 
-                    "llama_memory", "Exiting...", "Executing:", "Loading model..."
-                ]):
-                    continue
-                
-                # 2. Skip ASCII Art (Block chars and Mojibake)
-                if "█" in line or "▄" in line or "▀" in line or "â–€" in line:
-                    continue
-                
-                # 3. Skip the Prompt Echo
-                if line.strip().startswith("> "):
-                    continue
+            # 2. Skip ASCII Art (Block chars)
+            if "█" in line or "▄" in line or "▀" in line or "â–€" in line:
+                continue
+            
+            # 3. Skip the Prompt Echo (> Instruct: ...)
+            if line.strip().startswith("> "):
+                continue
 
-                # 4. Skip Speed Metrics (The line you want to remove)
-                # Catches: "[ Prompt: 84.0 t/s | Generation: 50.0 t/s ]"
-                if "t/s" in line and "Prompt:" in line:
-                    continue
+            # 4. Skip Speed Metrics
+            if "t/s" in line and "Prompt:" in line:
+                continue
 
-                # 5. Clean Loading Spinner (The "| - \" animation)
-                line = line.replace('\x08', '') # Remove backspaces
-                line = re.sub(r'^[\|\/\-\\]+\s*', '', line) # Remove spinner chars
+            # 5. Clean Loading Spinner
+            line = line.replace('\x08', '') 
+            line = re.sub(r'^[\|\/\-\\]+\s*', '', line) 
 
-                # 6. Skip Empty Lines
-                if not line.strip():
-                    continue
-                    
-                clean_lines.append(line)
+            # --- NEW FIXES START HERE ---
+            
+            # 6. Remove common prefixes if they appear at the start of the line
+            # This turns "Assistant: Once upon..." into "Once upon..."
+            # and removes standalone "Output:" lines.
+            line = re.sub(r'^(Assistant|Output|AI|Bot):\s*', '', line, flags=re.IGNORECASE)
+
+            # --- NEW FIXES END HERE ---
+
+            # 7. Skip Empty Lines (must be done after stripping prefixes)
+            if not line.strip():
+                continue
                 
-            return "\n".join(clean_lines).strip()
+            clean_lines.append(line)
+            
+        return "\n".join(clean_lines).strip()
