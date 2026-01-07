@@ -22,11 +22,11 @@ class RunnerConfig:
     name = "s25_llama_thesis_experiment"
     results_output_path = ROOT_DIR / 'results'
     operation_type = OperationType.AUTO
-    time_between_runs_in_ms = 180000  # 3 min cool-down between runs
+    time_between_runs_in_ms = 240000  # 3 min cool-down between runs
 
     # --- Device & ADB Settings ---
     ADB_PATH = "adb" 
-    DEVICE_ID = "192.168.43.35:5555"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
+    DEVICE_ID = "ce051715a471ce1905"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
     REMOTE_DIR = "/data/local/tmp"
     BINARY_NAME = "llama-cli"
     
@@ -55,19 +55,13 @@ class RunnerConfig:
         factor_model = FactorModel("model_file", 
                                    [
                                        "qwen2-0_5b-instruct-q4_k_m.gguf",
-                                       "qwen2.5-1.5b-instruct-q4_k_m.gguf",
-                                       "phi-2.Q4_K_M.gguf",
-                                       "qwen2.5-3b-instruct-q4_k_m.gguf",
-                                       "qwen2.5-7b-instruct-q4_k_m.gguf",
-                                       "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf",
-                                       "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
                                        "gemma-2-9b-it-Q4_K_M.gguf"
                                    ]
                                    )
         
         self.run_table_model = RunTableModel(
             factors=[factor_model],
-            repetitions=1,
+            repetitions=2,
             data_columns=[
                 'model_response',
                 'prompt_prefill_speed',     # t/s
@@ -82,7 +76,9 @@ class RunnerConfig:
                 'total_energy_consumption', # Joules
                 'energy_per_token',         # Joules/Token
                 'battery_capacity',         # Percentage
-                'battery_temperature'       # Celsius
+                'min_temperature',          # Celsius
+                'max_temperature',          # Celsius
+                'average_temperature'       # Celsius
             ]
         )
         return self.run_table_model
@@ -145,15 +141,22 @@ class RunnerConfig:
         # 7. Warm-Up phase
         WARMUP_MODEL = "qwen2-0_5b-instruct-q4_k_m.gguf"
         
-        warmup_prompt = "Instruct: Write a story about a robot.\\nOutput:"
+        article_text = (
+            "The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee "
+            "in 1989. He was working at CERN, the European Organization for Nuclear "
+            "Research, near Geneva, Switzerland. Berners-Lee created the Web to meet "
+            "the demand for automatic information-sharing between scientists in "
+            "universities and institutes around the world."
+            )
+
         cmd = (
             f"cd {self.REMOTE_DIR} && "
             f"LD_LIBRARY_PATH=. ./llama-cli "
             f"-m {WARMUP_MODEL} "
-            f"-p '{warmup_prompt}' "
+            f"-p 'Instruct: Summarize the following text.\nText: {article_text}\nOutput:' "
             f"-st "
             f"-n 128 "
-            f"-c 2048 -t 8 --temp 0 "
+            f"-c 512 -t 8 --temp 0 "
             f"> /dev/null 2>&1"
         )
         
@@ -162,6 +165,8 @@ class RunnerConfig:
         output.console_log("--> [WARMUP] Done.")
 
         output.console_log("--> [SETUP] Done.")
+
+        time.sleep(240)
 
     def start_run(self, context: RunnerContext) -> None:
         # Clear logcat to ensure clean slate for this specific run
@@ -189,19 +194,52 @@ class RunnerConfig:
         # 1. Clean previous file
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell rm -f {remote_log_file}", shell=True)
 
-        prompt_text = "Instruct: Write a story about a robot.\\nOutput:"
+        context_text = (
+            "The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee "
+            "in 1989. He was working at CERN, the European Organization for Nuclear "
+            "Research, near Geneva, Switzerland. Berners-Lee created the Web to meet "
+            "the demand for automatic information-sharing between scientists in "
+            "universities and institutes around the world."
+            )
+        
+        # 1.2 DYNAMIC PROMPT FORMATTING
+        # Select the correct template based on the model filename
+        if "gemma" in model.lower():
+            # Gemma 2 Format (Control Tokens)
+            final_prompt = (
+                f"<start_of_turn>user\\n"
+                f"Summarize the following text.\\nText: {context_text}<end_of_turn>\\n"
+                f"<start_of_turn>model\\n"
+            )
+        elif "phi-2" in model.lower():
+             # Phi-2 Format (Instruct/Output)
+            final_prompt = f"Instruct: Summarize the following text.\\nText: {context_text}\\nOutput:"
+        elif "llama-3" in model.lower():
+            # Llama 3 Format (Headers)
+            final_prompt = (
+                f"<|start_header_id|>user<|end_header_id|>\\n\\n"
+                f"Summarize the following text.\\nText: {context_text}<|eot_id|>"
+                f"<|start_header_id|>assistant<|end_header_id|>\\n\\n"
+            )
+        else:
+            # Qwen / OLMoE / Standard Format (ChatML)
+            final_prompt = (
+                f"<|im_start|>user\\n"
+                f"Summarize the following text.\\nText: {context_text}<|im_end|>\\n"
+                f"<|im_start|>assistant\\n"
+            )
         
         # 2. Construct Command
-        # FIX: Added '-t 8' to set default threads since variable was removed.
         cmd = (
             f"cd {self.REMOTE_DIR} && "
             f"LD_LIBRARY_PATH=. ./llama-cli "
             f"-m {model} "
-            f"-p '{prompt_text}' "
-            f"-st "                  # Single-turn mode
-            f"-n 128 "               # Fixed token limit
-            f"-c 2048 -t 8 --temp 0 "
-            f"> {remote_log_file} 2>&1"  # Merge streams
+            f"-p \"{final_prompt}\" " 
+            f"-e "                             # whether to process escapes sequences (\n, \r, \t, ', ", \) (default: true)
+            f"-st "
+            f"-n 128 "
+            f"-c 512 -t 8 --temp 0 "
+            f"> {remote_log_file} 2>&1"
         )
         
         output.console_log(f"--> Running Inference on {model}...")
@@ -223,6 +261,21 @@ class RunnerConfig:
             subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell logcat -d", stdout=f, shell=True)
 
     def populate_run_data(self, context: RunnerContext):
+
+        # --- 0. SET INPUT TOKENS MANUALLY ---
+        model_name = context.execute_run["model_file"].lower()
+        input_tokens_count = 76 # Default (Qwen)
+        
+        if "phi-2" in model_name:
+            input_tokens_count = 85
+        elif "llama-3" in model_name:
+            input_tokens_count = 79
+        elif "gemma" in model_name:
+            input_tokens_count = 81
+        elif "olmoe" in model_name:
+            input_tokens_count = 82
+        # ------------------------------------
+
         # --- 1. Load Paths ---
         battery_log_path = context.run_dir / "run_logcat.txt"
         llama_log_path = context.run_dir / "llama_output.txt"
@@ -234,7 +287,7 @@ class RunnerConfig:
         if os.path.exists(llama_log_path):
             with open(llama_log_path, "r", encoding="utf-8", errors="ignore") as f:
                 full_text = f.read()
-                llama_metrics = self._parse_llama_timings(full_text)
+                llama_metrics = self._parse_llama_timings(full_text, input_tokens_count)
                 model_response = self._clean_story_from_logs(full_text)
 
         # --- 3. Process Battery Logs (Trapezoidal Rule) ---
@@ -305,6 +358,8 @@ class RunnerConfig:
         avg_power = statistics.mean(power_readings) if power_readings else 0
         avg_capacity = statistics.mean(capacities_pct) if capacities_pct else 0
         avg_temp = statistics.mean(temps_c) if temps_c else 0
+        min_temp = min(temps_c) if temps_c else 0
+        max_temp = max(temps_c) if temps_c else 0
 
         # Energy Per Token
         gen_tokens = llama_metrics.get('output_tokens', 128)
@@ -325,7 +380,9 @@ class RunnerConfig:
             'total_energy_consumption': round(total_energy_joules, 4),
             'energy_per_token': round(energy_per_token, 4),
             'battery_capacity': round(avg_capacity, 2),
-            'battery_temperature': round(avg_temp, 2)
+            'average_temperature': round(avg_temp, 2),
+            'min_temperature': round(min_temp, 2),
+            'max_temperature': round(max_temp, 2)
         }
     
     def after_experiment(self):
@@ -342,11 +399,8 @@ class RunnerConfig:
         output.console_log("    [SCREEN] Restoring screen timeout to 2 minutes...")
         # Reset timeout to 120000ms (2 minutes)
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell settings put system screen_off_timeout 120000", shell=True)
-        
 
-        time.sleep(1)
-
-    def _parse_llama_timings(self, log_text):
+    def _parse_llama_timings(self, log_text, input_count):
         """Extracts TPS and calculates latencies."""
         data = {
             'prompt_tps': 0.0,
@@ -356,7 +410,7 @@ class RunnerConfig:
             'inference_latency': 0.0,
             'ttft': 0.0,
             'output_tokens': 128,
-            'input_tokens': 13
+            'input_tokens': input_count
         }
         
         p_match = re.search(r"Prompt:\s+(\d+\.\d+)\s+t/s", log_text)
