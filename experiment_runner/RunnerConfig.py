@@ -13,7 +13,7 @@ import re
 import statistics
 import os
 import glob
-
+import json  # Added for the new parser
 
 class RunnerConfig:
     ROOT_DIR = Path(dirname(realpath(__file__)))
@@ -22,11 +22,11 @@ class RunnerConfig:
     name = "s25_llama_thesis_experiment"
     results_output_path = ROOT_DIR / 'results'
     operation_type = OperationType.AUTO
-    time_between_runs_in_ms = 240000  # 3 min cool-down between runs
+    time_between_runs_in_ms = 3000  # 3 min cool-down between runs
 
     # --- Device & ADB Settings ---
     ADB_PATH = "adb" 
-    DEVICE_ID = "ce051715a471ce1905"  # Use wireless port: "192.168.43.227:5555" | "R5CY50M8TDM" Samsung S25 Ultra ADB Serial
+    DEVICE_ID = "R5CY50M8TDM"  # "192.168.43.227:5555" | "R5CY50M8TDM"
     REMOTE_DIR = "/data/local/tmp"
     BINARY_NAME = "llama-cli"
     
@@ -55,26 +55,43 @@ class RunnerConfig:
         factor_model = FactorModel("model_file", 
                                    [
                                        "qwen2-0_5b-instruct-q4_k_m.gguf",
+                                       "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+                                       "phi-2.Q4_K_M.gguf",
+                                       "qwen2.5-3b-instruct-q4_k_m.gguf",
+                                       "qwen2.5-7b-instruct-q4_k_m.gguf",
+                                       "OLMoE-1B-7B-0125-Instruct-Q4_K_M.gguf",
+                                       "Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
                                        "gemma-2-9b-it-Q4_K_M.gguf"
                                    ]
                                    )
         
         self.run_table_model = RunTableModel(
             factors=[factor_model],
-            repetitions=2,
+            repetitions=1,
             data_columns=[
                 'model_response',
+                
+                # --- Timing & Speed Metrics ---
+                'input_token_count',        # int
+                'output_token_count',       # int
+                'total_token_count',        # int
+                
                 'prompt_prefill_speed',     # t/s
                 'generation_decoder_speed', # t/s
+                
                 'prefill_latency',          # seconds
                 'generation_latency',       # seconds
                 'inference_latency',        # seconds
                 'time_to_first_token',      # seconds
+                
+                # --- Energy Metrics ---
                 'avg_current',              # Amps
                 'avg_voltage',              # Volts
                 'avg_power',                # Watts
                 'total_energy_consumption', # Joules
                 'energy_per_token',         # Joules/Token
+                
+                # --- Device Stats ---
                 'battery_capacity',         # Percentage
                 'min_temperature',          # Celsius
                 'max_temperature',          # Celsius
@@ -104,7 +121,7 @@ class RunnerConfig:
         else:
              output.console_log(f"--> WARNING: Local build path not found: {self.LOCAL_LLAMA_BUILD}")
 
-        # B. Add ALL Model files from the directory (So they are ready for the main experiment)
+        # B. Add ALL Model files from the directory
         if os.path.isdir(self.LOCAL_MODEL_PATH):
             model_files = glob.glob(os.path.join(self.LOCAL_MODEL_PATH, "*.gguf"))
             if not model_files:
@@ -155,6 +172,7 @@ class RunnerConfig:
             f"-m {WARMUP_MODEL} "
             f"-p 'Instruct: Summarize the following text.\nText: {article_text}\nOutput:' "
             f"-st "
+            f"-v "
             f"-n 128 "
             f"-c 512 -t 8 --temp 0 "
             f"> /dev/null 2>&1"
@@ -163,10 +181,7 @@ class RunnerConfig:
         # Execute
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell \"{cmd}\"", shell=True)
         output.console_log("--> [WARMUP] Done.")
-
         output.console_log("--> [SETUP] Done.")
-
-        time.sleep(240)
 
     def start_run(self, context: RunnerContext) -> None:
         # Clear logcat to ensure clean slate for this specific run
@@ -175,7 +190,6 @@ class RunnerConfig:
     def start_measurement(self, context: RunnerContext) -> None:
         output.console_log("--> Starting BatteryManager Service...")
         # Start service to log 100ms intervals
-        # Requesting CURRENT, VOLTAGE, CAPACITY, and TEMPERATURE
         cmd = (
             f"{self.ADB_PATH} -s {self.DEVICE_ID} shell am start-foreground-service "
             f"-n \"com.example.batterymanager_utility/com.example.batterymanager_utility.DataCollectionService\" "
@@ -184,14 +198,16 @@ class RunnerConfig:
             f"--ez toCSV False"
         )
         subprocess.run(cmd, shell=True)
+        # Allow service to spin up
+        time.sleep(2)
 
     def interact(self, context: RunnerContext) -> None:
         model = context.execute_run["model_file"]
         
-        # Single file for merged output (Stdout + Stderr)
+        # Define paths
         remote_log_file = "/data/local/tmp/llama_output.txt"
         
-        # 1. Clean previous file
+        # 1. Clean previous logs on device
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell rm -f {remote_log_file}", shell=True)
 
         context_text = (
@@ -202,41 +218,44 @@ class RunnerConfig:
             "universities and institutes around the world."
             )
         
-        # 1.2 DYNAMIC PROMPT FORMATTING
-        # Select the correct template based on the model filename
+        # 2. DYNAMIC PROMPT FORMATTING
         if "gemma" in model.lower():
-            # Gemma 2 Format (Control Tokens)
             final_prompt = (
-                f"<start_of_turn>user\\n"
-                f"Summarize the following text.\\nText: {context_text}<end_of_turn>\\n"
-                f"<start_of_turn>model\\n"
+                f"<start_of_turn>user\n"
+                f"Summarize the following text.\nText: {context_text}<end_of_turn>\n"
+                f"<start_of_turn>model\n"
             )
         elif "phi-2" in model.lower():
-             # Phi-2 Format (Instruct/Output)
-            final_prompt = f"Instruct: Summarize the following text.\\nText: {context_text}\\nOutput:"
+            final_prompt = f"Instruct: Summarize the following text.\n{context_text}\nOutput:"
         elif "llama-3" in model.lower():
-            # Llama 3 Format (Headers)
             final_prompt = (
-                f"<|start_header_id|>user<|end_header_id|>\\n\\n"
-                f"Summarize the following text.\\nText: {context_text}<|eot_id|>"
-                f"<|start_header_id|>assistant<|end_header_id|>\\n\\n"
+                f"<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\n"
+                f"Summarize the following text.\nText: {context_text}<|eot_id|>"
+                f"<|start_header_id|>assistant<|end_header_id|>\n\n"
+            )
+        elif "olmoe" in model.lower():
+            final_prompt = (
+                f"<|endoftext|><|user|>\n"
+                f"Summarize the following text.\nText: {context_text}\n"
+                f"<|assistant|>\n"
             )
         else:
-            # Qwen / OLMoE / Standard Format (ChatML)
             final_prompt = (
-                f"<|im_start|>user\\n"
-                f"Summarize the following text.\\nText: {context_text}<|im_end|>\\n"
-                f"<|im_start|>assistant\\n"
+                f"<|im_start|>user\n"
+                f"Summarize the following text.\nText: {context_text}\n"
+                f"<|im_end|>\n"
+                f"<|im_start|>assistant\n"
             )
-        
-        # 2. Construct Command
+
+        # 5. Cmd
+        # Ensure we capture stdout/stderr to the file for the parser to work
         cmd = (
             f"cd {self.REMOTE_DIR} && "
             f"LD_LIBRARY_PATH=. ./llama-cli "
             f"-m {model} "
-            f"-p \"{final_prompt}\" " 
-            f"-e "                             # whether to process escapes sequences (\n, \r, \t, ', ", \) (default: true)
+            f"-p '{final_prompt}' "
             f"-st "
+            f"-v "
             f"-n 128 "
             f"-c 512 -t 8 --temp 0 "
             f"> {remote_log_file} 2>&1"
@@ -247,7 +266,7 @@ class RunnerConfig:
         # Execute blocking call
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell \"{cmd}\"", shell=True)
 
-        # 3. Pull the single file to local context directory
+        # 6. Pull the results
         local_log_file = context.run_dir / "llama_output.txt"
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} pull {remote_log_file} \"{local_log_file}\"", shell=True)
 
@@ -261,34 +280,25 @@ class RunnerConfig:
             subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell logcat -d", stdout=f, shell=True)
 
     def populate_run_data(self, context: RunnerContext):
-
-        # --- 0. SET INPUT TOKENS MANUALLY ---
-        model_name = context.execute_run["model_file"].lower()
-        input_tokens_count = 76 # Default (Qwen)
-        
-        if "phi-2" in model_name:
-            input_tokens_count = 85
-        elif "llama-3" in model_name:
-            input_tokens_count = 79
-        elif "gemma" in model_name:
-            input_tokens_count = 81
-        elif "olmoe" in model_name:
-            input_tokens_count = 82
-        # ------------------------------------
-
         # --- 1. Load Paths ---
         battery_log_path = context.run_dir / "run_logcat.txt"
         llama_log_path = context.run_dir / "llama_output.txt"
 
-        # --- 2. Process Llama Output (Single File) ---
-        model_response = ""
-        llama_metrics = {}
+        # --- 2. Process Llama Output (Using updated Parser) ---
+        llama_metrics = {
+            'model_response': '',
+            'input_token_count': 0, 'output_token_count': 0, 'total_token_count': 0,
+            'prompt_prefill_speed': 0.0, 'generation_decoder_speed': 0.0,
+            'prefill_latency': 0.0, 'generation_latency': 0.0, 'inference_latency': 0.0,
+            'time_to_first_token': 0.0
+        }
         
         if os.path.exists(llama_log_path):
-            with open(llama_log_path, "r", encoding="utf-8", errors="ignore") as f:
-                full_text = f.read()
-                llama_metrics = self._parse_llama_timings(full_text, input_tokens_count)
-                model_response = self._clean_story_from_logs(full_text)
+            try:
+                # Use the new Robust Parsing Logic
+                llama_metrics = self._parse_llama_log_file(str(llama_log_path))
+            except Exception as e:
+                output.console_log(f"Error parsing llama logs: {e}")
 
         # --- 3. Process Battery Logs (Trapezoidal Rule) ---
         power_readings = []
@@ -306,29 +316,25 @@ class RunnerConfig:
                 for line in f:
                     if "BatteryMgr:DataCollectionService: stats =>" in line:
                         try:
-                            # Parse CSV: "stats => timestamp, current, voltage"
-                            # Note: We removed Capacity and Temp from start_measurement
                             csv_part = line.split("stats => ")[1].strip()
                             parts = csv_part.split(",")
                             
                             ts = int(parts[0])
-                            curr_raw = int(parts[1]) # Unit: µA (Micro)
-                            volt_mV = int(parts[2])  # Unit: mV (Milli)
+                            curr_raw = int(parts[1]) # Unit: µA
+                            volt_mV = int(parts[2])  # Unit: mV
                             cap_pct = int(parts[3])  # Unit: %
                             temp_raw = int(parts[4]) # Unit: Tenths of °C
 
                             # --- UNIT CONVERSION ---
                             time_sec = ts / 1000.0
                             
-                            # A. Current: µA -> Amps (Divide by 1,000,000)
-                            # B. Subtract Baseline (Find Model's Draw)
-                            # We use max(0, ...) to ensure we don't get negative power if noise dips below baseline
+                            # Current: µA -> Amps. Subtract Baseline (0.10A approx).
                             current_A = max(0, (abs(curr_raw) / 1000000.0) - 0.10)
                             
-                            # Voltage: mV -> Volts (Divide by 1,000)
+                            # Voltage: mV -> Volts
                             voltage_V = volt_mV / 1000.0
 
-                            # Convert tenths to degrees
+                            # Temp: Tenths -> Degrees
                             temp_C_val = temp_raw / 10.0  
                             
                             power_W = current_A * voltage_V
@@ -343,7 +349,6 @@ class RunnerConfig:
                             if prev_time is not None:
                                 dt = time_sec - prev_time
                                 if dt > 0:
-                                    # Average power over this interval
                                     avg_p = (power_W + prev_power) / 2
                                     total_energy_joules += avg_p * dt
                             
@@ -362,19 +367,30 @@ class RunnerConfig:
         max_temp = max(temps_c) if temps_c else 0
 
         # Energy Per Token
-        gen_tokens = llama_metrics.get('output_tokens', 128)
+        gen_tokens = llama_metrics.get('output_token_count', 0)
         energy_per_token = total_energy_joules / gen_tokens if gen_tokens > 0 else 0
 
+        # Return Combined Data
         return {
-            'model_response': model_response,
-            'prompt_prefill_speed': llama_metrics.get('prompt_tps', 0),
-            'generation_decoder_speed': llama_metrics.get('gen_tps', 0),
-            'prefill_latency': llama_metrics.get('prefill_latency', 0),
-            'generation_latency': llama_metrics.get('gen_latency', 0),
-            'inference_latency': llama_metrics.get('inference_latency', 0),
-            'time_to_first_token': llama_metrics.get('ttft', 0),
+            'model_response': llama_metrics['model_response'],
             
-            'avg_current': round(avg_current, 6), # High precision for Amps
+            # Counts
+            'input_token_count': llama_metrics['input_token_count'],
+            'output_token_count': llama_metrics['output_token_count'],
+            'total_token_count': llama_metrics['total_token_count'],
+
+            # Speed
+            'prompt_prefill_speed': llama_metrics['prompt_prefill_speed'],
+            'generation_decoder_speed': llama_metrics['generation_decoder_speed'],
+
+            # Latency (Parsed as Seconds)
+            'prefill_latency': llama_metrics['prefill_latency'],
+            'generation_latency': llama_metrics['generation_latency'],
+            'inference_latency': llama_metrics['inference_latency'],
+            'time_to_first_token': llama_metrics['time_to_first_token'],
+            
+            # Energy & Device Stats
+            'avg_current': round(avg_current, 6),
             'avg_voltage': round(avg_voltage, 4),
             'avg_power': round(avg_power, 4),
             'total_energy_consumption': round(total_energy_joules, 4),
@@ -387,92 +403,111 @@ class RunnerConfig:
     
     def after_experiment(self):
         output.console_log("All experiments complete.")
-        
-        # Clear logs and close app
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell logcat -c", shell=True)
-        
-        # Close BatteryManager
         output.console_log("Closing BatteryManager App...")
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell am force-stop com.example.batterymanager_utility", shell=True)
-
-        # RESTORE SCREEN ---
         output.console_log("    [SCREEN] Restoring screen timeout to 2 minutes...")
-        # Reset timeout to 120000ms (2 minutes)
         subprocess.run(f"{self.ADB_PATH} -s {self.DEVICE_ID} shell settings put system screen_off_timeout 120000", shell=True)
 
-    def _parse_llama_timings(self, log_text, input_count):
-        """Extracts TPS and calculates latencies."""
-        data = {
-            'prompt_tps': 0.0,
-            'gen_tps': 0.0,
+    def _parse_llama_log_file(self, file_path):
+        """
+        Parses the llama output log file using Regex to extract timing metrics
+        and JSON parsing to extract the final clean response.
+        """
+        metrics = {
+            'model_response': '',
+            'input_token_count': 0,
+            'output_token_count': 0,
+            'total_token_count': 0,
+            'prompt_prefill_speed': 0.0,
+            'generation_decoder_speed': 0.0,
             'prefill_latency': 0.0,
-            'gen_latency': 0.0,
+            'generation_latency': 0.0,
             'inference_latency': 0.0,
-            'ttft': 0.0,
-            'output_tokens': 128,
-            'input_tokens': input_count
+            'time_to_first_token': 0.0
         }
+
+        # Regex Patterns
+        # 1. Prompt Eval: Matches "prompt eval time = ..."
+        prompt_pattern = re.compile(r"prompt eval time\s+=\s+(\d+\.\d+)\s+ms\s+/\s+(\d+)\s+tokens\s+\(\s+(\d+\.\d+)\s+ms per token,\s+(\d+\.\d+)\s+tokens per second\)")
         
-        p_match = re.search(r"Prompt:\s+(\d+\.\d+)\s+t/s", log_text)
-        g_match = re.search(r"Generation:\s+(\d+\.\d+)\s+t/s", log_text)
-
-        if p_match: data['prompt_tps'] = float(p_match.group(1))
-        if g_match: data['gen_tps'] = float(g_match.group(1))
-
-        if data['prompt_tps'] > 0:
-            data['prefill_latency'] = data['input_tokens'] / data['prompt_tps']
-        if data['gen_tps'] > 0:
-            data['gen_latency'] = data['output_tokens'] / data['gen_tps']
-            data['ttft'] = data['prefill_latency'] + (1 / data['gen_tps'])
-
-        data['inference_latency'] = data['prefill_latency'] + data['gen_latency']
-        return data
-
-    def _clean_story_from_logs(self, full_text):
-        """
-        Aggressively filters system logs, spinners, menus, speed metrics,
-        and chat prefixes (Assistant:, Output:, etc.).
-        """
-        clean_lines = []
+        # 2. Eval (Generation): Uses (?<!prompt) to ensure we don't match "prompt eval time"
+        #    Matches "eval time = ..." but NOT "prompt eval time = ..."
+        eval_pattern = re.compile(r"(?<!prompt)\s+eval time\s+=\s+(\d+\.\d+)\s+ms\s+/\s+(\d+)\s+(?:tokens|runs).*?\(\s+(\d+\.\d+)\s+ms per token,\s+(\d+\.\d+)\s+tokens per second\)")
         
-        for line in full_text.split('\n'):
-            # 1. Skip System Info & Menu Commands
-            if any(x in line for x in [
-                "build ", "model ", "modalities :", "available commands:", 
-                "/exit", "/regen", "/clear", "/read", 
-                "llama_memory", "Exiting...", "Executing:", "Loading model..."
-            ]):
-                continue
-            
-            # 2. Skip ASCII Art (Block chars)
-            if "█" in line or "▄" in line or "▀" in line or "â–€" in line:
-                continue
-            
-            # 3. Skip the Prompt Echo (> Instruct: ...)
-            if line.strip().startswith("> "):
-                continue
+        # 3. Total Time
+        total_pattern = re.compile(r"total time\s+=\s+(\d+\.\d+)\s+ms")
+        
+        # 4. Response JSON
+        response_pattern = re.compile(r'Parsed message: (\{.*\})')
 
-            # 4. Skip Speed Metrics
-            if "t/s" in line and "Prompt:" in line:
-                continue
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
 
-            # 5. Clean Loading Spinner
-            line = line.replace('\x08', '') 
-            line = re.sub(r'^[\|\/\-\\]+\s*', '', line) 
+                # 1. Extract Prompt Metrics
+                prompt_match = prompt_pattern.search(content)
+                if prompt_match:
+                    metrics['prefill_latency'] = float(prompt_match.group(1)) / 1000.0  # ms -> s
+                    metrics['input_token_count'] = int(prompt_match.group(2))
+                    metrics['prompt_prefill_speed'] = float(prompt_match.group(4))
 
-            # --- NEW FIXES START HERE ---
-            
-            # 6. Remove common prefixes if they appear at the start of the line
-            # This turns "Assistant: Once upon..." into "Once upon..."
-            # and removes standalone "Output:" lines.
-            line = re.sub(r'^(Assistant|Output|AI|Bot):\s*', '', line, flags=re.IGNORECASE)
+                # 2. Extract Generation Metrics & TTFT
+                eval_match = eval_pattern.search(content)
+                if eval_match:
+                    metrics['generation_latency'] = float(eval_match.group(1)) / 1000.0  # ms -> s
+                    metrics['output_token_count'] = int(eval_match.group(2))
+                    ms_per_token = float(eval_match.group(3))
+                    metrics['generation_decoder_speed'] = float(eval_match.group(4))
+                    
+                    # Calculate TTFT: Prefill time + time for 1 decode step
+                    metrics['time_to_first_token'] = metrics['prefill_latency'] + (ms_per_token / 1000.0)
 
-            # --- NEW FIXES END HERE ---
+                # 3. Extract Total Metrics
+                total_match = total_pattern.search(content)
+                if total_match:
+                    metrics['inference_latency'] = float(total_match.group(1)) / 1000.0  # ms -> s
+                else:
+                    # Fallback if total time line is missing
+                    metrics['inference_latency'] = metrics['prefill_latency'] + metrics['generation_latency']
 
-            # 7. Skip Empty Lines (must be done after stripping prefixes)
-            if not line.strip():
-                continue
+                metrics['total_token_count'] = metrics['input_token_count'] + metrics['output_token_count']
                 
-            clean_lines.append(line)
-            
-        return "\n".join(clean_lines).strip()
+                # 4. Extract Model Response (JSON Method)
+                response_match = response_pattern.search(content)
+                if response_match:
+                    json_str = response_match.group(1)
+                    try:
+                        data = json.loads(json_str)
+                        metrics['model_response'] = data.get('content', '')
+                    except json.JSONDecodeError:
+                        metrics['model_response'] = "Error parsing JSON response content"
+                else:
+                    # Fallback to simple cleanup if JSON line not found
+                    metrics['model_response'] = self._fallback_clean_response(content)
+
+        except FileNotFoundError:
+            output.console_log(f"Error: File '{file_path}' not found.")
+        
+        return metrics
+
+    def _fallback_clean_response(self, full_text):
+        """
+        Fallback method if the JSON 'Parsed message' line is missing.
+        """
+        # Remove logs header/footer
+        content = re.sub(r"build:.*", "", full_text)
+        content = re.sub(r"llama_memory_breakdown_print.*", "", content, flags=re.DOTALL)
+        
+        # Split by common Prompt endings to find response start
+        separators = ["<|im_start|>assistant", "<start_of_turn>model", "Output:"]
+        for sep in separators:
+            if sep in content:
+                content = content.split(sep)[-1]
+                break
+        
+        # Remove CLI artifacts (spinners, timestamps)
+        content = re.sub(r'^[\|/\\\-\s]+', '', content)
+        content = re.sub(r'^\s*[\d\.]+\s*ms.*', '', content, flags=re.MULTILINE)
+        
+        return content.strip()
