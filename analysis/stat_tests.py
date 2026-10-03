@@ -4,6 +4,9 @@
 2. Wilcoxon signed-rank test, Q4_K_M vs IQ4_XS (paired by model and repetition, zero differences dropped)
 3. Friedman omnibus test across the 8 models, then pairwise Wilcoxon signed-rank tests with
    Holm-Bonferroni correction. Blocks = 30 Q4_K_M + 30 IQ4_XS repetitions per model.
+4. Effect sizes: matched-pairs rank-biserial correlation r for every Wilcoxon test
+   (r > 0: first value larger; |r| = 1: every pair differs in the same direction),
+   and the median and relative difference between Q4_K_M and IQ4_XS.
 
 Usage:
     python analysis/stat_tests.py [--heatmaps]
@@ -67,6 +70,17 @@ def model_matrix(runs, col):
     return matrix[list(MODELS.values())]
 
 
+def rank_biserial(diff):
+    """Matched-pairs rank-biserial correlation of paired differences (zero differences dropped)."""
+    d = np.asarray(diff, dtype=float)
+    d = d[d != 0]
+    if d.size == 0:
+        return 0.0
+    ranks = stats.rankdata(np.abs(d))
+    t_plus, t_minus = ranks[d > 0].sum(), ranks[d < 0].sum()
+    return (t_plus - t_minus) / (t_plus + t_minus)
+
+
 def quantization_tests(runs):
     rows = []
     for col, (label, _) in METRICS.items():
@@ -74,9 +88,13 @@ def quantization_tests(runs):
         w_sw, p_sw = stats.shapiro(diff)
         diff_nz = diff[diff != 0]  # Remove ties
         w, p = stats.wilcoxon(diff_nz)
+        median_q4 = runs.loc[runs.quantization == "Q4_K_M", col].median()
+        median_iq = runs.loc[runs.quantization == "IQ4_XS", col].median()
         rows.append({"Metric": label, "Shapiro W": round(w_sw, 4), "Shapiro p": f"{p_sw:.4e}",
                      "Wilcoxon W": w, "Wilcoxon p": f"{p:.2e}",
-                     "Median Q4_K_M - IQ4_XS": round(diff.median(), 4)})
+                     "Rank-biserial r": round(rank_biserial(diff), 3),
+                     "Median Q4_K_M - IQ4_XS": round(diff.median(), 4),
+                     "Relative diff of medians (%)": round(100 * (median_q4 - median_iq) / median_iq, 2)})
     return pd.DataFrame(rows)
 
 
@@ -87,7 +105,7 @@ def model_comparison(runs, col, lower_is_better):
     chi2, p_friedman = stats.friedmanchisquare(*[data_matrix[m] for m in models])
     mean_ranks = data_matrix.rank(axis=1, ascending=lower_is_better).mean().sort_values()
 
-    pairs, p_values, z_scores = [], [], []
+    pairs, p_values, z_scores, effect_sizes = [], [], [], []
     for m1, m2 in itertools.combinations(models, 2):
         s, p = stats.wilcoxon(data_matrix[m1], data_matrix[m2])
         diffs = np.array(data_matrix[m1]) - np.array(data_matrix[m2])
@@ -101,10 +119,12 @@ def model_comparison(runs, col, lower_is_better):
         pairs.append((m1, m2))
         p_values.append(p)
         z_scores.append(z)
+        effect_sizes.append(rank_biserial(diffs))
     reject, p_holm, _, _ = multipletests(p_values, alpha=0.05, method="holm")
 
     pairwise = pd.DataFrame({"model_a": [a for a, _ in pairs], "model_b": [b for _, b in pairs],
-                             "z": z_scores, "p_raw": p_values, "p_holm": p_holm, "significant": reject})
+                             "z": z_scores, "rank_biserial_r": effect_sizes,
+                             "p_raw": p_values, "p_holm": p_holm, "significant": reject})
 
     # Summary: each model against the next one in the ranking
     lookup = {frozenset((a, b)): (p, z) for a, b, p, z in zip(pairwise.model_a, pairwise.model_b, p_holm, z_scores)}

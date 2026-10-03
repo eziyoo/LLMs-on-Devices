@@ -22,11 +22,13 @@ Running Large Language Models (LLMs) on a phone promises privacy, low latency an
 
 ## 🚀 Key findings
 
-- **Quantization-energy paradox:** importance-aware quantization (`IQ4_XS`) reduces peak memory, but on CPU inference it does not reduce energy compared with mixed-precision `Q4_K_M`. `Q4_K_M` wins on speed, latency, time to first token and energy. The de-quantization overhead offsets the memory-bandwidth savings.
-- **Architecture over parameter count:** model architecture and active compute per token predict energy and latency better than the 4-bit format does.
-- **The promise of sparsity:** the Mixture-of-Experts model OLMoE-1B-7B has the storage footprint of a 7B model but the energy profile of a 1–2B dense model.
-- **A practical sweet spot:** mid-sized models around 3B parameters balance quality, latency and energy. Dense models above 3B are too slow for interactive use.
-- **Metric bias:** reference-based BERTScore rewards small models that copy the input. A reference-free LLM judge (G-Eval style) better reflects summary quality.
+These are the findings of one case study: one flagship phone, CPU-only `llama.cpp` inference and one single-turn summarization task.
+
+- **Memory savings are not energy savings:** importance-aware `IQ4_XS` lowers peak memory compared with mixed-precision `Q4_K_M` (Q4_K_M uses 14.5 % more, median over all runs). It does not lower energy: Q4_K_M runs use 3.3 % less energy and have 4.9 % lower latency. All differences are statistically significant (Wilcoxon; effect sizes in `analysis/stat_tests.py`). The differences are small compared with the differences between models.
+- **Model choice matters more than the 4-bit format:** across the eight models, energy and latency vary far more with model size and architecture than between the two quantizations.
+- **One sparse model behaves like a small dense one:** the Mixture-of-Experts model OLMoE-1B-7B (≈1B active parameters per token) has the file size of a 7B model, but its speed and energy are in the range of the 1–2B dense models. Only one MoE model was evaluated.
+- **Mid-sized models balance the trade-offs:** models around 3B parameters combine good quality with moderate latency and energy. Dense models of 7–9B need more than 10 s for a 100-token response on this device.
+- **Metric bias:** reference-based BERTScore rewards small models that copy the input. A reference-free LLM judge (G-Eval style) better separates abstractive summaries.
 
 ## 🧪 Setup at a glance
 
@@ -66,7 +68,9 @@ python experiment/measure_baseline.py --minutes 60        # idle current
 python ../experiment-runner/experiment-runner/ experiment/RunnerConfig.py
 ```
 
-📘 **The full step-by-step guide is in [`docs/REPRODUCE.md`](docs/REPRODUCE.md).** It covers requirements, building llama.cpp for Android, model quantization, phone preparation, running, analysis and troubleshooting.
+📘 **The full step-by-step guide is in [`docs/REPRODUCE.md`](docs/REPRODUCE.md).** It covers requirements, building llama.cpp for Android, model quantization, phone preparation, running, analysis, extending the study and troubleshooting.
+
+🔬 **[`docs/METHODS.md`](docs/METHODS.md)** documents the exact workload, energy measurement (sampling, clocks, limits), quality evaluation (judge model, prompts, blinding) and statistics (pairing, effect sizes).
 
 ## 📂 Repository structure
 
@@ -75,7 +79,7 @@ python ../experiment-runner/experiment-runner/ experiment/RunnerConfig.py
 │                        companion app (energy logger), quantization notebook
 ├── analysis/            aggregate.py, stat_tests.py, reparse_raw_logs.py, figures.ipynb, quality/
 ├── data/                runs/ (480 runs), raw/ (raw logs), quality/, aggregated/  → see data/README.md
-├── docs/                REPRODUCE.md (full guide)
+├── docs/                REPRODUCE.md (full guide), METHODS.md (methods in detail)
 └── archive/             Early research prototypes (Android app, Perfetto, scrapers), not needed for the paper
 ```
 

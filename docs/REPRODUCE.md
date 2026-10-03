@@ -28,6 +28,8 @@ No rooting or hardware modification is needed.
   12. [Run the experiment](#12-run-the-experiment)
   13. [Analyse your results](#13-analyse-your-results)
   14. [Evaluate output quality](#14-evaluate-output-quality)
+- [Extending the study](#extending-the-study)
+- [Methods in detail](METHODS.md)
 - [Troubleshooting](#troubleshooting)
 - [Appendix](#appendix)
 
@@ -415,6 +417,23 @@ The two scores answer different questions:
 - **Judge model:** the paper used `gpt-5.2`, set in the `model=` argument. A different judge model gives different absolute scores.
 
 Then re-run `python analysis/aggregate.py` to merge the scores.
+
+---
+
+## Extending the study
+
+The pipeline is not tied to the paper's device, models or task.
+
+- **Another phone:** set its `device_id` in `config.ini`, measure its own baseline (section 11) and run the sanity check (section 10). Phones with less than 12 GB RAM will not fit the 7–9B models.
+- **Another model:**
+  1. Put the GGUF in `model_dir` and set `[run] model`.
+  2. Add the filename and a new run ID to `MODEL_RUN_IDS` in `experiment/settings.py`. Without an entry, the results folder is named after the file.
+  3. If the model uses a chat template not covered in `RunnerConfig.interact()` (Qwen ChatML, Phi-2, OLMoE, Llama-3, Gemma), add a branch with its template and end-of-turn token ID(s).
+  4. To include it in the analysis, also add its label to `MODEL_LABELS` in `analysis/aggregate.py` and to `MODELS` in `analysis/stat_tests.py`.
+- **Another task or prompt:** edit `context_text` and the instruction in `RunnerConfig.interact()`. Keep `-n 100 --ignore-eos` if you want the same fixed-length comparison.
+- **GPU/NPU backends:** llama.cpp has GPU build options (e.g. Vulkan, OpenCL), but they were not used or tested in this study. Rebuild with the backend you want, then run `sanity_check.py`. The parsers need the same timing and memory lines, and the memory breakdown may print a different device line.
+
+[`docs/METHODS.md`](METHODS.md) documents the workload, energy measurement, quality evaluation and statistics in detail.
 
 ---
 
