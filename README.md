@@ -20,6 +20,8 @@
 
 Running Large Language Models (LLMs) on a phone promises privacy, low latency and offline use, but it is limited by memory, thermal headroom and battery capacity. This repository contains a **reproducible, non-intrusive pipeline** that measures energy, latency, memory footprint and output quality of on-device LLMs on an **unrooted** Android phone, together with **all data and analysis** from the paper. It covers 8 open models from 0.5B to 9B parameters, each in 2 quantizations, with 30 runs per configuration.
 
+**Contents:** [Key findings](#-key-findings) · [How it works](#-how-it-works) · [Results at a glance](#-results-at-a-glance) · [Setup](#-setup-at-a-glance) · [Quick start](#-quick-start) · [Documentation](#-documentation) · [Repository structure](#-repository-structure) · [Citation](#-citation)
+
 ## 🚀 Key findings
 
 These are the findings of one case study: one flagship phone, CPU-only `llama.cpp` inference and one single-turn summarization task.
@@ -29,6 +31,45 @@ These are the findings of one case study: one flagship phone, CPU-only `llama.cp
 - **One sparse model behaves like a small dense one:** the Mixture-of-Experts model OLMoE-1B-7B (≈1B active parameters per token) has the file size of a 7B model, but its speed and energy are in the range of the 1–2B dense models. Only one MoE model was evaluated.
 - **Mid-sized models balance the trade-offs:** models around 3B parameters combine good quality with moderate latency and energy. Dense models of 7–9B need more than 10 s for a 100-token response on this device.
 - **Metric bias:** reference-based BERTScore rewards small models that copy the input. A reference-free LLM judge (G-Eval style) better separates abstractive summaries.
+
+## 🔧 How it works
+
+```
+ Computer (host)                                  Android phone (unrooted)
+ ┌───────────────────────────────┐   Wi-Fi ADB    ┌──────────────────────────────────────┐
+ │ Experiment-Runner             │ ─────────────► │ llama-cli (llama.cpp, CPU, 8 threads)│
+ │  └ experiment/RunnerConfig.py │                │ <model>.gguf                         │
+ │      ├ prompt + run control   │ ◄───────────── │ companion app: current, voltage,     │
+ │      └ log_parsers.py         │   logs (pull)  │ temperature every 100 ms → logcat    │
+ └───────────────────────────────┘                └──────────────────────────────────────┘
+```
+
+For every run:
+1. The computer starts the battery logger on the phone.
+2. It runs one summarization with `llama-cli` (exactly 100 tokens, greedy decoding).
+3. It stops the logger, pulls both logs and turns them into one row of measurements: speed, latency, time to first token, memory, and energy as the baseline-subtracted, trapezoid-integrated power.
+4. A 200 s cool-down follows.
+
+Each configuration is repeated 30 times.
+
+**Energy without root.** External power monitors require opening the phone, and low-level battery readings over ADB need root. Instead, a small companion app installed on the phone reads current and voltage through Android's official `BatteryManager` API. The phone stays unmodified and runs under realistic conditions, and the cable stays unplugged (wireless ADB) so charging can't distort the readings. Details and limits are in [`docs/METHODS.md`](docs/METHODS.md).
+
+## 📊 Results at a glance
+
+Median of 30 runs per configuration (from [`data/aggregated/final_results.csv`](data/aggregated/final_results.csv)). One 100-token summarization on the Galaxy S25 Ultra, CPU only. G-Eval is the LLM-judge quality score (0–1).
+
+| Model | Decode speed (tok/s)<br>Q4_K_M / IQ4_XS | End-to-end latency (s)<br>Q4_K_M / IQ4_XS | Energy (J)<br>Q4_K_M / IQ4_XS | Peak memory (MiB)<br>Q4_K_M / IQ4_XS | G-Eval<br>Q4_K_M / IQ4_XS |
+|---|---|---|---|---|---|
+| Qwen2-0.5B | 50.5 / 56.2 | 2.53 / 2.29 | 44.0 / 36.8 | 678 / 632 | 0.52 / 0.50 |
+| Qwen2.5-1.5B | 31.6 / 31.3 | 4.37 / 4.61 | 92.9 / 93.4 | 1373 / 1162 | 0.69 / 0.66 |
+| Phi-2 (2.8B) | 21.4 / 20.8 | 7.15 / 7.35 | 143.8 / 142.0 | 1969 / 1712 | 0.68 / 0.64 |
+| Qwen2.5-3B | 19.8 / 19.8 | 7.54 / 7.94 | 151.5 / 157.8 | 2320 / 1971 | 0.73 / 0.72 |
+| OLMoE-1B-7B (MoE) | 38.2 / 38.5 | 3.60 / 3.74 | 76.5 / 79.0 | 4182 / 3707 | 0.60 / 0.58 |
+| Qwen2.5-7B | 10.5 / 10.7 | 14.83 / 16.26 | 242.2 / 251.5 | 4792 / 4349 | 0.77 / 0.75 |
+| Llama-3.1-8B | 10.5 / 9.1 | 16.13 / 18.68 | 291.7 / 302.5 | 5007 / 4556 | 0.73 / 0.71 |
+| Gemma-2-9B | 7.2 / 6.8 | 20.15 / 22.06 | 316.3 / 325.2 | 6163 / 5612 | 0.92 / 0.91 |
+
+Interquartile ranges, prefill speed, time to first token and the per-run data are in [`data/`](data/README.md).
 
 ## 🧪 Setup at a glance
 
@@ -68,9 +109,17 @@ python experiment/measure_baseline.py --minutes 60        # idle current
 python ../experiment-runner/experiment-runner/ experiment/RunnerConfig.py
 ```
 
-📘 **The full step-by-step guide is in [`docs/REPRODUCE.md`](docs/REPRODUCE.md).** It covers requirements, building llama.cpp for Android, model quantization, phone preparation, running, analysis, extending the study and troubleshooting.
+This is only the outline. Before running on a phone, follow the **[step-by-step roadmap](docs/REPRODUCE.md#track-b-roadmap)**: building llama.cpp, preparing the models and the phone, and the 16 measurement rounds.
 
-🔬 **[`docs/METHODS.md`](docs/METHODS.md)** documents the exact workload, energy measurement (sampling, clocks, limits), quality evaluation (judge model, prompts, blinding) and statistics (pairing, effect sizes).
+## 📚 Documentation
+
+| Document | Read it to… |
+|---|---|
+| [`docs/REPRODUCE.md`](docs/REPRODUCE.md) | Reproduce the analysis (Track A) or run the whole experiment step by step (Track B): roadmap, checklists, how a round works, extending the study, troubleshooting |
+| [`docs/METHODS.md`](docs/METHODS.md) | Understand the method: models and quantization (Q4_K_M, IQ4_XS, dense vs MoE), experimental controls and their reasons, workload and prompts, energy measurement (why, how, limits), quality evaluation (BERTScore, LLM judge), statistics |
+| [`data/README.md`](data/README.md) | Use the data: files, every column with its unit, provenance |
+| [`experiment/companion_app/README.md`](experiment/companion_app/README.md) | Learn about the on-device energy logger and its adaptations |
+| [`archive/README.md`](archive/README.md) | See the early prototypes and why they were not used |
 
 ## 📂 Repository structure
 
@@ -89,7 +138,7 @@ python ../experiment-runner/experiment-runner/ experiment/RunnerConfig.py
 
 ¹ University of Naples Federico II, Italy · ² Vrije Universiteit Amsterdam, The Netherlands
 
-Contact: Eziyo Ehsani, [LinkedIn](https://www.linkedin.com/in/eziyo/)
+Contact: Eziyo Ehsani, [LinkedIn](https://www.linkedin.com/in/eziyo/). Questions and issues are welcome via [GitHub Issues](https://github.com/eziyoo/LLMs-on-Devices/issues).
 
 ## 📝 Citation
 
