@@ -54,16 +54,31 @@ Models evaluated under `Q4_K_M` and `IQ4_XS` quantization schemes:
 * Gemma-2-9B
 
 ## 💻 Getting Started
-### Prerequisites
-* Python 3.10+
-* Android platform-tools (`adb`) configured globally
-* `llama.cpp` built for Android (AArch64)
-* A target Android device connected via Wireless ADB
+**📘 Full step-by-step guide: [`docs/REPRODUCE.md`](docs/REPRODUCE.md)** (requirements, llama.cpp build, models, phone setup, baseline, running, analysis, troubleshooting).
 
-### Execution
-1. Update `DEVICE_ID`, `LOCAL_LLAMA_BUILD`, and `LOCAL_MODEL_PATH` in `RunnerConfig.py` to match your local environment and device IP.
-2. Run the experiment through your Experiment Runner framework.
-3. The script will automatically push required binaries/models, execute the warmup sequence, and begin the iterative testing matrix, saving outputs and parsed power metrics to the `/results` directory.
+Quick start:
+```bash
+git clone https://github.com/eziyoo/LLMs-on-Devices.git
+git clone https://github.com/S2-group/experiment-runner.git
+python3 -m venv venv && source venv/bin/activate
+pip install -r LLMs-on-Devices/requirements.txt -r experiment-runner/requirements.txt
+# build llama.cpp for Android, prepare models and the phone (see the guide), edit experiment_runner/RunnerConfig.py, then:
+cd LLMs-on-Devices && python ../experiment-runner/experiment-runner/ experiment_runner/RunnerConfig.py
+```
+
+## 📂 Repository Structure
+| Path | Content |
+|---|---|
+| `experiment_runner/RunnerConfig.py` | The measurement pipeline (Experiment-Runner configuration) |
+| `experiment_runner/csv/` | Per-run result tables, one per model × quantization |
+| `experiment_runner/csv_processor.ipynb`, `Results/EDA.ipynb` | Aggregation (median, IQR) and plots |
+| `experiment_runner/quality_metrics/` | BERTScore and LLM-as-a-judge (G-Eval style) |
+| `experiment_runner/quantization/` | imatrix + `IQ4_XS` quantization notebook |
+| `experiment_runner/parser/` | Standalone log parsers for debugging |
+| `plugins/BatteryManager/spy_app/` | On-device energy logger (BatteryManager companion APK) |
+| `scrapers/` | Hugging Face GGUF model list and dataset downloader |
+| `android-app/` | Early on-device chat/benchmark app prototype |
+| `docs/REPRODUCE.md` | Reproduction guide |
 
 ## 🎓 Authors & Contact
 **Eziyo Ehsani**
@@ -77,7 +92,12 @@ If you use this pipeline or our findings in your research, please consider citin
 ```bibtex
 @article{ehsani2026sustainability,
   title={Sustainability Is Not Linear: Quantifying Performance, Energy, and Privacy Trade-offs in On-Device Intelligence},
-  author={Eziyo Ehsani, Ivano Malavolta, Roberto Pietrantuono},
+  author={Ehsani, Eziyo and Malavolta, Ivano and Giamattei, Luca and Pietrantuono, Roberto},
   year={2026},
   institution={University of Naples Federico II & Vrije Universiteit Amsterdam}
 }
+```
+Citation metadata is also available in [`CITATION.cff`](CITATION.cff).
+
+## ⚖️ License
+Released under the [MIT License](LICENSE). Third-party components (llama.cpp, Experiment-Runner, BatteryManager companion) keep their own licenses.

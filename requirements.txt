@@ -1,0 +1,26 @@
+# Host-side Python dependencies (Python 3.10+).
+# Experiment-Runner has its own requirements: pip install -r <experiment-runner>/requirements.txt
+# Full setup: docs/REPRODUCE.md
+
+# Aggregation, plotting, notebooks
+pandas
+numpy
+matplotlib
+seaborn
+adjustText
+openpyxl
+jupyter
+
+# Statistics
+scipy
+statsmodels
+
+# Quality evaluation
+bert-score
+torch
+openai>=1.40,<2
+pydantic>=2
+
+# Model and dataset download
+huggingface_hub
+datasets

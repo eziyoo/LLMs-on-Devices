@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this pipeline or its findings, please cite the paper below."
+title: "LLMs-on-Devices: experimental pipeline for on-device LLM energy, performance and quality profiling"
+type: software
+license: MIT
+repository-code: "https://github.com/eziyoo/LLMs-on-Devices"
+authors:
+  - given-names: Eziyo
+    family-names: Ehsani
+    orcid: "https://orcid.org/0009-0009-4702-2622"
+    affiliation: "University of Naples Federico II"
+  - given-names: Ivano
+    family-names: Malavolta
+    orcid: "https://orcid.org/0000-0001-5773-8346"
+    affiliation: "Vrije Universiteit Amsterdam"
+  - given-names: Luca
+    family-names: Giamattei
+    orcid: "https://orcid.org/0000-0003-3767-4036"
+    affiliation: "University of Naples Federico II"
+  - given-names: Roberto
+    family-names: Pietrantuono
+    orcid: "https://orcid.org/0000-0003-2449-1724"
+    affiliation: "University of Naples Federico II"
+preferred-citation:
+  type: article
+  title: "Sustainability Is Not Linear: Quantifying Performance, Energy, and Privacy Trade-offs in On-Device Intelligence"
+  year: 2026
+  authors:
+    - given-names: Eziyo
+      family-names: Ehsani
+    - given-names: Ivano
+      family-names: Malavolta
+    - given-names: Luca
+      family-names: Giamattei
+    - given-names: Roberto
+      family-names: Pietrantuono
