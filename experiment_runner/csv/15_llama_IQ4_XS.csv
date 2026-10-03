@@ -1,0 +1,151 @@
+__run_id,__done,model_file,model_response,input_token_count,output_token_count,total_token_count,prompt_prefill_speed,generation_decoder_speed,prefill_latency,generation_latency,inference_latency,time_to_first_token,avg_current,avg_voltage,avg_power,total_energy_consumption,energy_per_token,battery_capacity,min_battery_capacity,max_battery_capacity,min_temperature,max_temperature,average_temperature,peak_memory,model_weight,KV_cache,context_RAM,compute_RAM
+run_0_repetition_0,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.6,9.04,7.62709,11.05848,18.68556,7.73767,3.05112,4.4218,13.4979,299.2129,2.9921,100,100,100,24.7,24.7,24.7,4556,4234,64,64,258
+run_0_repetition_1,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.42,8.68,7.71888,11.52637,19.24525,7.83414,2.943438,4.3444,12.793,292.6774,2.9268,100,100,100,24.5,24.6,24.54,4556,4234,64,64,258
+run_0_repetition_2,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.62,9.95,7.61683,10.04944,17.66627,7.71732,3.407479,4.414,15.0406,320.9346,3.2093,100,100,100,24.9,24.9,24.9,4556,4234,64,64,258
+run_0_repetition_3,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.66,9.92,7.59931,10.0819,17.68121,7.70013,3.379806,4.3577,14.7186,313.7559,3.1376,99.8,99,100,25.4,26.1,25.96,4556,4234,64,64,258
+run_0_repetition_4,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.59,9.99,7.6352,10.00804,17.64324,7.73528,3.480547,4.3135,14.9774,317.0462,3.1705,99,99,99,25.1,25.5,25.22,4556,4234,64,64,258
+run_0_repetition_5,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.62,9.6,7.61605,10.41633,18.03238,7.72021,3.216143,4.399,14.1478,306.4458,3.0645,99,99,99,25.7,25.7,25.7,4556,4234,64,64,258
+run_0_repetition_6,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.61,9.21,7.62517,10.85929,18.48446,7.73376,3.15758,4.3268,13.6675,302.751,3.0275,98,98,98,25.6,26.5,26.21,4556,4234,64,64,258
+run_0_repetition_7,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.52,9.09,7.66589,11.00401,18.6699,7.77593,2.944401,4.3143,12.6714,284.508,2.8451,98,98,98,25.3,25.7,25.36,4556,4234,64,64,258
+run_0_repetition_8,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.28,8.52,7.78858,11.73473,19.5233,7.90593,2.869132,4.3795,12.5713,291.4285,2.9143,97,97,97,25.5,26.1,25.53,4556,4234,64,64,258
+run_0_repetition_9,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,14.92,9.83,7.97452,10.16841,18.14293,8.0762,3.341907,4.3075,14.3631,313.3483,3.1335,96.43,96,97,25.3,25.8,25.52,4556,4234,64,64,258
+run_0_repetition_10,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.41,9.99,7.7211,10.00507,17.72617,7.82115,3.434104,4.375,15.0242,321.0329,3.2103,96,96,96,25.8,25.8,25.8,4556,4234,64,64,258
+run_0_repetition_11,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.53,9.36,7.66253,10.68824,18.35076,7.76941,3.37147,4.3398,14.6416,322.993,3.2299,95.8,95,96,25.9,25.9,25.9,4556,4234,64,64,258
+run_0_repetition_12,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.45,9,7.70184,11.11167,18.81351,7.81296,3.045644,4.2688,12.9672,303.111,3.0311,95,95,95,25.3,25.8,25.43,4556,4234,64,64,258
+run_0_repetition_13,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.54,8.76,7.65652,11.40916,19.06568,7.77061,2.914254,4.359,12.7032,287.7982,2.878,94,94,94,25.4,25.4,25.4,4556,4234,64,64,258
+run_0_repetition_14,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,14.26,9.56,8.34416,10.46516,18.80932,8.44881,3.270975,4.2884,13.9997,338.1192,3.3812,94,94,94,25.4,25.6,25.5,4556,4234,64,64,258
+run_0_repetition_15,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.53,9.37,7.66391,10.67072,18.33463,7.77062,3.33512,4.345,14.4911,319.7852,3.1979,93,93,93,25.9,25.9,25.9,4556,4234,64,64,258
+run_0_repetition_16,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.56,8.98,7.64768,11.13876,18.78644,7.75907,3.144907,4.3029,13.5601,304.8148,3.0481,92.75,92,93,25.8,25.9,25.87,4556,4234,64,64,258
+run_0_repetition_17,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.56,8.68,7.64796,11.51632,19.16428,7.76312,2.871687,4.2301,12.1119,280.7492,2.8075,92,92,92,25.2,25.7,25.31,4556,4234,64,64,258
+run_0_repetition_18,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.63,8.19,7.61412,12.21739,19.83151,7.73629,2.729414,4.3284,11.815,277.4602,2.7746,91.96,91,92,25.4,26,25.42,4556,4234,64,64,258
+run_0_repetition_19,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.53,9.84,7.66117,10.16144,17.82262,7.76278,3.415643,4.2533,14.5011,311.0293,3.1103,91,91,91,25.2,25.5,25.34,4556,4234,64,64,258
+run_0_repetition_20,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.58,9.4,7.63622,10.63294,18.26916,7.74255,3.171771,4.321,13.7052,303.3646,3.0336,91,91,91,25.6,25.6,25.6,4556,4234,64,64,258
+run_0_repetition_21,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.43,9.1,7.71298,10.98361,18.69659,7.82282,3.080787,4.2936,13.2479,296.4648,2.9646,90,90,90,25.3,25.8,25.4,4556,4234,64,64,258
+run_0_repetition_22,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.38,8.63,7.73551,11.5851,19.32061,7.85136,2.890337,4.2151,12.1617,280.6991,2.807,90,90,90,25.3,25.6,25.38,4556,4234,64,64,258
+run_0_repetition_23,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.46,8.18,7.69808,12.23115,19.92922,7.82039,2.767921,4.304,11.9131,280.7162,2.8072,89,89,89,25.6,25.6,25.6,4556,4234,64,64,258
+run_0_repetition_24,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.31,9.54,7.77289,10.47944,18.25233,7.87768,3.250835,4.2351,13.7551,302.2481,3.0225,89,89,89,25.6,25.8,25.7,4556,4234,64,64,258
+run_0_repetition_25,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.43,9.14,7.71345,10.936,18.64945,7.82281,3.039661,4.291,13.0432,294.4561,2.9446,88,88,88,26.1,26.1,26.1,4556,4234,64,64,258
+run_0_repetition_26,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.55,8.68,7.65399,11.52222,19.1762,7.76921,2.911138,4.2649,12.4346,284.5159,2.8452,87.77,87,88,26,26.3,26.07,4556,4234,64,64,258
+run_0_repetition_27,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.53,8.15,7.66503,12.26745,19.93247,7.7877,2.796511,4.1823,11.6831,276.2026,2.762,87,87,87,25.7,26.1,25.79,4556,4234,64,64,258
+run_0_repetition_28,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.57,9.64,7.64259,10.37876,18.02135,7.74638,3.274168,4.275,13.9971,309.3456,3.0935,87,87,87,25.9,25.9,25.9,4556,4234,64,64,258
+run_0_repetition_29,DONE,Meta-Llama-3.1-8B-Instruct-IQ4_XS.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists worldwide. 
+
+(Note: The year 1989 is often cited as the year the World Wide Web was invented, but it was first proposed by Tim Berners-Lee in 1989 and the first website was launched in 1991.) 
+
+However, if you want a more concise",119,100,219,15.43,9.11,7.71176,10.98059,18.69235,7.82157,3.106928,4.1873,13.0051,290.525,2.9053,86,86,86,25.8,26.5,26.15,4556,4234,64,64,258

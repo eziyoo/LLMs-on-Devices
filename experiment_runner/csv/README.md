@@ -1,6 +1,6 @@
 # Per-run results
 
-One Experiment-Runner `run_table.csv` per configuration (30 rows each), renamed as below. `csv_processor.ipynb` and the statistics in `docs/REPRODUCE.md` (section 16) read these exact names.
+These are the final per-run tables used in the paper: one Experiment-Runner `run_table.csv` per configuration, 30 runs each. `csv_processor.ipynb` and the rebuild snippet in `docs/REPRODUCE.md` (section 16.3) read these exact names. The raw logs behind them are in `data/raw_logs_ER2.zip`.
 
 | # | File | # | File |
 |---|---|---|---|
@@ -13,4 +13,4 @@ One Experiment-Runner `run_table.csv` per configuration (30 rows each), renamed 
 | 7 | `7_llama_Q4_K_M.csv` | 15 | `15_llama_IQ4_XS.csv` |
 | 8 | `8_gemma_Q4_K_M.csv` | 16 | `16_gemma_IQ4_XS.csv` |
 
-Columns: `__run_id`, `__done`, `model_file`, `model_response`, token counts, speeds, latencies, energy, battery, temperature and memory metrics (see `RunnerConfig.create_run_table_model`).
+Columns: `__run_id`, `__done`, `model_file`, `model_response`, then token counts, speeds, latencies, energy, battery, temperature and memory metrics (see `RunnerConfig.create_run_table_model`).

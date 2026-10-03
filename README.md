@@ -56,6 +56,8 @@ Models evaluated under `Q4_K_M` and `IQ4_XS` quantization schemes:
 ## 💻 Getting Started
 **📘 Full step-by-step guide: [`docs/REPRODUCE.md`](docs/REPRODUCE.md)** (requirements, llama.cpp build, models, phone setup, baseline, running, analysis, troubleshooting).
 
+All measured data (480 runs), quality scores and statistical scripts are included, so you can reproduce the paper's tables without a phone. See *Published data* in the guide.
+
 Quick start:
 ```bash
 git clone https://github.com/eziyoo/LLMs-on-Devices.git
@@ -70,9 +72,11 @@ cd LLMs-on-Devices && python ../experiment-runner/experiment-runner/ experiment_
 | Path | Content |
 |---|---|
 | `experiment_runner/RunnerConfig.py` | The measurement pipeline (Experiment-Runner configuration) |
-| `experiment_runner/csv/` | Per-run result tables, one per model × quantization |
-| `experiment_runner/csv_processor.ipynb`, `Results/EDA.ipynb` | Aggregation (median, IQR) and plots |
-| `experiment_runner/quality_metrics/` | BERTScore and LLM-as-a-judge (G-Eval style) |
+| `experiment_runner/csv/` | Final per-run result tables, one per model × quantization (30 runs each) |
+| `data/raw_logs_ER2.zip` | Raw per-run logs (llama.cpp output + battery samples) |
+| `experiment_runner/csv_processor.ipynb`, `Results/` | Aggregation (median, IQR), `final_results.xlsx` and plots (`EDA.ipynb`) |
+| `experiment_runner/quality_metrics/` | BERTScore and LLM-as-a-judge (G-Eval style) scripts; scores in `results/` |
+| `experiment_runner/statistics/` | Shapiro-Wilk, Wilcoxon, Friedman + Holm scripts and their inputs |
 | `experiment_runner/quantization/` | imatrix + `IQ4_XS` quantization notebook |
 | `experiment_runner/parser/` | Standalone log parsers for debugging |
 | `plugins/BatteryManager/spy_app/` | On-device energy logger (BatteryManager companion APK) |

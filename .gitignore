@@ -30,7 +30,6 @@ outputs/
 .DS_Store
 Thumbs.db
 
-# Local Claude settings
 .claude
 
 # Editor / temp
@@ -42,6 +41,8 @@ guide/
 paper/
 
 # Experiment-Runner per-run output and model weights
-experiment_runner/results/
+experiment_runner/results/*/
 *.gguf
 .env
+
+script/

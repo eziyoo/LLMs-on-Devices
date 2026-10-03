@@ -6,6 +6,22 @@ It assumes basic familiarity with Python, a terminal and Android developer optio
 
 ---
 
+## Published data (no phone needed)
+
+The repository contains everything measured for the paper, so you can re-run the analysis without repeating the experiment:
+
+| Path | Content |
+|---|---|
+| `experiment_runner/csv/1_…_Q4_K_M.csv` … `16_…_IQ4_XS.csv` | Final per-run tables: 16 configurations × 30 runs, all metrics plus the model response |
+| `data/raw_logs_ER2.zip` | Raw per-run logs behind those tables (see [`data/README.md`](../data/README.md)) |
+| `experiment_runner/Results/final_results.xlsx` | Aggregated medians (IQR) + quality scores, the input of `EDA.ipynb` |
+| `experiment_runner/quality_metrics/results/` | `BERTscore.csv` and `llm_a_judge_scores.csv` |
+| `experiment_runner/statistics/` | The statistical tests reported in the paper, with their input tables |
+
+To reproduce the paper's tables and figures, install `requirements.txt` (section 4) and go to [section 14](#14-aggregate-results-and-plot).
+
+---
+
 ## Contents
 
 1. [Overview and time budget](#1-overview-and-time-budget)
@@ -98,11 +114,14 @@ LLMs-on-Devices/
 │   ├── parser/                    # Standalone copies of the log parsers, for debugging
 │   ├── quality_metrics/
 │   │   ├── BERTscore.py           # Reference-based quality
-│   │   └── test_DeepEval.py       # LLM-as-a-judge (G-Eval style)
+│   │   ├── test_DeepEval.py       # LLM-as-a-judge (G-Eval style)
+│   │   └── results/               # Published quality scores
 │   ├── quantization/              # imatrix + IQ4_XS quantization notebook
-│   ├── csv/                       # Per-configuration run tables (input to csv_processor)
+│   ├── csv/                       # Per-configuration run tables (published data)
 │   ├── csv_processor.ipynb        # Per-run CSVs → medians + IQR
-│   └── Results/EDA.ipynb          # Plots
+│   ├── Results/                   # EDA.ipynb (plots) + final_results.xlsx
+│   └── statistics/                # Shapiro-Wilk, Wilcoxon, Friedman + Holm scripts
+├── data/raw_logs_ER2.zip          # Raw per-run logs of the final run
 ├── plugins/BatteryManager/spy_app/  # Companion APK (on-device energy logger)
 ├── plugins/perfetto/              # Earlier CPU-frequency power-model prototype (not used)
 ├── scrapers/                      # HF GGUF model list + dataset downloader
@@ -285,7 +304,7 @@ Expect lines like `... stats => 1738000000000,-412345,4381,97,268`, which are th
 
 `toCSV False` is intentional. Samples go to logcat instead of being buffered in the app's RAM, which would compete with the LLM for memory.
 
-If you rebuild the app from upstream source, apply the crash fix in [Appendix A](#a-batterymanager-crash-fix).
+To rebuild the app from source, use the patched fork: [`eziyoo/batterymanager-companion`, branch `fix-battery-property-crash`](https://github.com/eziyoo/batterymanager-companion/tree/fix-battery-property-crash). Upstream code without the fix crashes; see [Appendix A](#a-batterymanager-crash-fix).
 
 ---
 
@@ -445,6 +464,17 @@ cp experiment_runner/results/<name>/run_table.csv experiment_runner/csv/<name>.c
 
 Then recharge the phone and repeat sections 12 and 13 for the next configuration. The 16 expected CSV names are listed in [`experiment_runner/csv/README.md`](../experiment_runner/csv/README.md).
 
+**Workflow used for the paper:** instead of editing one config 16 times, the authors kept one folder per configuration. Each folder holds a copy of `RunnerConfig.py` with only that model uncommented and `WARMUP_MODEL` set to it, so each round's results stay in their own folder:
+
+```
+experiments_Q4_K_M/1_qwen2-0_5b/RunnerConfig.py   →  …/1_qwen2-0_5b/results/s25_llama_thesis_experiment/
+experiments_Q4_K_M/2_qwen2.5-1.5b/RunnerConfig.py
+…
+experiments_IQ4_XS/8_gemma/RunnerConfig.py
+```
+
+Run each with `python <experiment-runner>/experiment-runner/ experiments_<quant>/<n>_<model>/RunnerConfig.py`. The layout inside `data/raw_logs_ER2.zip` follows this structure.
+
 ---
 
 ## 14. Aggregate results and plot
@@ -453,13 +483,15 @@ Then recharge the phone and repeat sections 12 and 13 for the next configuration
    - It loads the 16 files from `csv/` and computes the **median** of each metric across the 30 runs, plus the **IQR** of the speed, latency and energy metrics.
    - It writes `final_results.csv`.
 2. **Add quality scores:** add two columns, `Final_BERTscore` and `Overall_G-Eval`, from section 15.
-3. **Plot:** [`experiment_runner/Results/EDA.ipynb`](../experiment_runner/Results/EDA.ipynb) reads `final_results.xlsx` from its own folder. Convert the CSV first:
+3. **Plot:** [`experiment_runner/Results/EDA.ipynb`](../experiment_runner/Results/EDA.ipynb) reads `final_results.xlsx` from its own folder.
+   - The published `final_results.xlsx` is already there, so the notebook runs as-is.
+   - To plot your own results, convert your CSV and overwrite it:
 
-   ```bash
-   python -c "import pandas as pd; pd.read_csv('experiment_runner/final_results.csv').to_excel('experiment_runner/Results/final_results.xlsx', index=False)"
-   ```
+     ```bash
+     python -c "import pandas as pd; pd.read_csv('experiment_runner/final_results.csv').to_excel('experiment_runner/Results/final_results.xlsx', index=False)"
+     ```
 
-The aggregated tables used in the paper are in `paper/.../data/Q4_K_M.csv` and `IQ4_XS.csv`. Compare your output against them.
+Compare your output against the published `final_results.xlsx`.
 
 ---
 
@@ -497,7 +529,9 @@ python test_DeepEval.py        # → llm_a_judge_scores.csv
 
 Use `python`, not `pytest`. The file runs from `__main__` and contains no test functions.
 
-The judge scores all 16 responses relative to each other on four criteria: *Faithfulness*, *Relevance*, *Coherence* and *Overall_Quality*. The `Overall_Quality` score is what the published CSVs report as `Overall_G-Eval`.
+The judge scores all 16 responses relative to each other on four criteria: *Faithfulness*, *Relevance*, *Coherence* and *Overall_Quality*. The `Overall_Quality` score is reported as `Overall_G-Eval`, and `BERT_F1` as `Final_BERTscore`.
+
+The paper's scores are in [`quality_metrics/results/`](../experiment_runner/quality_metrics/results/): `BERTscore.csv` and `llm_a_judge_scores.csv`.
 
 The judge model is set in the `model=` argument (the paper used `gpt-5.2`). A different judge model will give different absolute scores.
 
@@ -505,53 +539,87 @@ The judge model is set in the `model=` argument (the paper used `gpt-5.2`). A di
 
 ## 16. Statistical analysis
 
-The paper's statistics are computed on the **per-run** data. Run this from the repo root:
+The scripts used for the paper are in [`experiment_runner/statistics/`](../experiment_runner/statistics/). Each one reads its input from the current folder, so `cd` into the folder first. The paired comparisons match runs by repetition index.
+
+### 16.1 Quantization: `Q4_K_M` vs `IQ4_XS`
+
+```bash
+cd experiment_runner/statistics/quantization
+python wilcoxon.py     # Wilcoxon signed-rank on paired (Q4_K_M − IQ4_XS) differences, 6 metrics
+python shapiro.py      # Shapiro-Wilk normality of those paired differences
+```
+
+- Input: `run_table_all.csv`, which is all 480 runs with a `quantization` column.
+- `shapiro.py` tests one metric at a time. Change `values=` in the pivot (default `energy_per_token`) to test another.
+- Expected output from `wilcoxon.py` (paper table):
+
+| Metric | W | p |
+|---|---|---|
+| Generation speed | 11179 | 4.23e-03 |
+| Total energy | 8967 | 3.36e-07 |
+| Peak memory | 0 | 2.82e-41 |
+| Time to first token | 899 | 2.24e-36 |
+| Inference latency | 2966 | 1.32e-26 |
+
+### 16.2 Models: Friedman + pairwise Wilcoxon (Holm)
+
+```bash
+cd experiment_runner/statistics/model_comparison
+python wilcoxon_holm.py
+```
+
+The script does the following:
+
+1. Runs the Friedman omnibus test across the 8 models.
+2. Computes mean ranks.
+3. Runs all 28 pairwise Wilcoxon signed-rank tests with Holm-Bonferroni correction.
+4. Prints a ranked summary table and saves a p-value heatmap.
+
+**Inputs:** one 60 × 8 matrix per metric, with blocks = 30 `Q4_K_M` + 30 `IQ4_XS` repetitions and columns = models:
+
+- `Generation_speed.csv`
+- `Total_Energy_Consumption.csv`
+- `Peak_Memory.csv`
+- `Inference_Latency.csv`
+- `Time_to_FIrst_token.csv`
+- `Energy_per_Token.csv`
+
+Choose the metric by editing these two lines at the top of the script:
+
+```python
+FILENAME = 'Total_Energy_Consumption.csv'
+LOWER_IS_BETTER = True     # set False for Generation_speed.csv
+```
+
+**Expected output for energy:** Friedman χ² = 415.84, p = 9.55e-86. Mean ranks: Qwen2-0.5B 1.00, OLMoE 2.05, Qwen2.5-1.5B 2.95, Phi-2 4.02, Qwen2.5-3B 4.98, Qwen2.5-7B 6.08, Llama-3.1-8B 6.98, Gemma-2-9B 7.93.
+
+### 16.3 Rebuilding the inputs from your own runs
+
+Both input formats can be built from the 16 per-run CSVs in `experiment_runner/csv/`:
 
 ```python
 import pandas as pd
-from itertools import combinations
-from scipy.stats import shapiro, friedmanchisquare, wilcoxon
-from statsmodels.stats.multitest import multipletests
 
 CSV = "experiment_runner/csv"
-MODELS = ["qwen2-0_5b", "qwen2.5-1.5b", "phi-2", "qwen2.5-3b", "OLMoE", "qwen2.5-7b", "llama", "gemma"]
-# metric column -> sign that makes "lower is better" (for ranking)
-METRICS = {"generation_decoder_speed": -1, "total_energy_consumption": 1, "peak_memory": 1,
-           "inference_latency": 1, "time_to_first_token": 1}
+MODELS = {"qwen2-0_5b": "Qwen2-0.5B", "qwen2.5-1.5b": "Qwen2.5-1.5B", "phi-2": "Phi-2",
+          "qwen2.5-3b": "Qwen2.5-3B", "OLMoE": "OLMoE-1B-7B-0125", "qwen2.5-7b": "Qwen2.5-7B",
+          "llama": "Llama3.1-8B", "gemma": "Gemma2-9B"}
 
-def load(quant, first):
-    return {m: pd.read_csv(f"{CSV}/{first + i}_{m}_{quant}.csv") for i, m in enumerate(MODELS)}
+frames = []
+for q, first in (("Q4_K_M", 1), ("IQ4_XS", 9)):
+    for i, (key, name) in enumerate(MODELS.items()):
+        df = pd.read_csv(f"{CSV}/{first + i}_{key}_{q}.csv")
+        frames.append(df.assign(model_file=name, quantization=q, rep=range(len(df))))
+runs = pd.concat(frames)
 
-q4, iq = load("Q4_K_M", 1), load("IQ4_XS", 9)
+# 16.1 input
+runs.to_csv("run_table_all.csv", index=False)
 
-for col, sign in METRICS.items():
-    # 60 blocks per model: 30 Q4_K_M runs then 30 IQ4_XS runs, paired by repetition index
-    table = pd.DataFrame({m: pd.concat([q4[m][col], iq[m][col]], ignore_index=True) * sign for m in MODELS})
-
-    w, p_sw = shapiro(table.values.ravel())                          # normality
-    chi2, p_fr = friedmanchisquare(*[table[m] for m in MODELS])      # omnibus across models
-    mean_ranks = table.rank(axis=1).mean()                           # 1 = best
-
-    pairs = list(combinations(MODELS, 2))                            # post-hoc
-    p_holm = multipletests([wilcoxon(table[a], table[b]).pvalue for a, b in pairs], method="holm")[1]
-
-    q = pd.concat([q4[m][col] for m in MODELS]).values               # Q4_K_M vs IQ4_XS
-    i = pd.concat([iq[m][col] for m in MODELS]).values
-    w_q = wilcoxon(q, i)
-
-    print(f"\n== {col}\nShapiro W={w:.4f} p={p_sw:.3e} | Friedman chi2={chi2:.2f} p={p_fr:.3e}")
-    print("Mean ranks:", mean_ranks.round(2).to_dict())
-    print(f"Q4_K_M vs IQ4_XS: W={w_q.statistic:.0f} p={w_q.pvalue:.3e}  "
-          f"medians {pd.Series(q).median():.2f} vs {pd.Series(i).median():.2f}")
-    print("Non-significant pairs (Holm p>=0.05):", [pr for pr, ph in zip(pairs, p_holm) if ph >= 0.05])
+# 16.2 input, e.g. total energy
+m = runs.pivot_table(index=["quantization", "rep"], columns="model_file", values="total_energy_consumption")
+m.index = [f"{q}_repetition_{r}" for q, r in m.index]
+m.rename_axis("Row Labels").to_csv("Total_Energy_Consumption.csv")
 ```
-
-This follows the procedure in the paper's Methodology and Results sections:
-
-- Shapiro-Wilk for normality.
-- Friedman as the omnibus test across models.
-- Pairwise Wilcoxon signed-rank tests with Holm-Bonferroni correction.
-- A paired Wilcoxon test for `Q4_K_M` vs `IQ4_XS`.
 
 ---
 

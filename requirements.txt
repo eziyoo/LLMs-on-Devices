@@ -3,7 +3,7 @@
 # Full setup: docs/REPRODUCE.md
 
 # Aggregation, plotting, notebooks
-pandas
+pandas<3          # statistics/model_comparison/wilcoxon_holm.py fails under pandas 3 copy-on-write
 numpy
 matplotlib
 seaborn
@@ -14,6 +14,7 @@ jupyter
 # Statistics
 scipy
 statsmodels
+tabulate          # DataFrame.to_markdown in statistics/quantization/wilcoxon.py
 
 # Quality evaluation
 bert-score

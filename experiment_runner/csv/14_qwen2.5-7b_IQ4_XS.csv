@@ -1,0 +1,121 @@
+__run_id,__done,model_file,model_response,input_token_count,output_token_count,total_token_count,prompt_prefill_speed,generation_decoder_speed,prefill_latency,generation_latency,inference_latency,time_to_first_token,avg_current,avg_voltage,avg_power,total_energy_consumption,energy_per_token,battery_capacity,min_battery_capacity,max_battery_capacity,min_temperature,max_temperature,average_temperature,peak_memory,model_weight,KV_cache,context_RAM,compute_RAM
+run_0_repetition_0,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.56,10.76,6.82513,9.29517,16.1203,6.91808,3.335758,4.3628,14.5214,288.2828,2.8828,100,100,100,25.4,25.7,25.54,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_1,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.41,8.78,6.8871199999999995,11.386379999999999,18.273490000000002,7.000979999999999,2.588006,4.421,11.4416,257.4756,2.5748,100,100,100,25.9,25.9,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_2,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.68,10.75,6.77508,9.30125,16.07633,6.86809,3.304878,4.4138,14.588,283.1977,2.832,100,100,100,25.9,26.0,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_3,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.36,10.63,6.9077,9.41058,16.31828,7.00181,3.432691,4.348,14.8996,292.7333,2.9273,99.5,99,100,25.5,25.8,25.65,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_4,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.66,8.59,6.78175,11.63975,18.4215,6.898149999999999,2.732405,4.403,12.0308,262.2862,2.6229,99,99,99,25.9,25.9,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_5,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.64,10.74,6.78991,9.31125,16.10115,6.88302,3.448002,4.403,15.1816,294.5998,2.946,99,99,99,25.9,25.9,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_6,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.62,8.86,6.79923,11.28251,18.08175,6.912059999999999,2.751249,4.3018,11.8588,254.19,2.5419,98,98,98,25.7,26.2,25.96,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_7,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.71,10.72,6.764189999999999,9.33244,16.09662,6.8575099999999996,3.467531,4.392,15.2294,294.0963,2.941,98,98,98,25.6,25.6,25.6,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_8,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.64,8.9,6.7892399999999995,11.23507,18.02431,6.90159,2.656124,4.387,11.6524,249.0393,2.4904,97,97,97,25.6,25.6,25.6,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_9,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.48,10.57,6.8588000000000005,9.46232,16.32112,6.95342,3.274714,4.319,14.114,281.4415,2.8144,96.55,96,97,25.6,25.7,25.66,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_10,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.69,10.75,6.77031,9.3041,16.07441,6.8633500000000005,3.386702,4.377,14.8236,285.8417,2.8584,96,96,96,25.9,25.9,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_11,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.6,8.97,6.80752,11.14366,17.95118,6.91896,2.718176,4.37,11.8784,253.5143,2.5351,96,96,96,25.8,25.8,25.8,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_12,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.37,10.75,6.9016,9.30222,16.20382,6.99462,3.441548,4.3029,14.7881,286.9224,2.8692,95,95,95,25.6,26.4,26.12,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_13,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.62,8.69,6.79773,11.504209999999999,18.30193,6.912769999999999,2.773835,4.2489,11.7582,254.4439,2.5444,95,95,95,25.5,25.9,25.57,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_14,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.65,10.67,6.78708,9.375440000000001,16.16253,6.88083,3.430285,4.358,14.9492,296.651,2.9665,94,94,94,25.7,25.7,25.7,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_15,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.69,8.82,6.77092,11.33147,18.10239,6.8842300000000005,2.740134,4.3207,11.8615,254.734,2.5473,94,94,94,25.8,26.0,25.93,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_16,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.69,10.78,6.768689999999999,9.27369,16.042379999999998,6.8614299999999995,3.512819,4.349,15.2772,295.0535,2.9505,93,93,93,25.7,25.7,25.7,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_17,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.71,8.86,6.761430000000001,11.29007,18.05149,6.8743300000000005,2.589814,4.345,11.2527,241.275,2.4128,93,93,93,25.7,25.7,25.7,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_18,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.57,10.75,6.81875,9.302389999999999,16.12114,6.91177,3.41414,4.2945,14.6442,283.8356,2.8384,92,92,92,25.6,26.5,26.24,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_19,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.61,8.88,6.80423,11.26366,18.0679,6.916869999999999,2.697613,4.2341,11.408,253.0352,2.5304,92,92,92,25.4,25.8,25.49,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_20,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.63,10.78,6.7949399999999995,9.279069999999999,16.07401,6.8877299999999995,3.431029,4.331,14.8598,286.8055,2.8681,92,92,92,25.6,25.6,25.6,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_21,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.74,10.74,6.7517700000000005,9.313360000000001,16.06513,6.844900000000001,3.398719,4.2705,14.5048,279.7434,2.7974,91,91,91,25.8,26.4,26.27,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_22,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.68,8.96,6.77312,11.164219999999998,17.93735,6.88476,2.784426,4.2317,11.777,251.5897,2.5159,90.29,90,91,25.5,25.8,25.59,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_23,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.51,10.81,6.84553,9.25478,16.10032,6.93808,3.376326,4.316,14.5722,283.3021,2.833,90,90,90,25.6,25.6,25.6,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_24,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.71,8.9,6.760680000000001,11.23447,17.99514,6.87302,2.754117,4.289,11.8263,252.5451,2.5255,89.79,89,90,25.7,25.9,25.74,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_25,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.58,10.78,6.8156099999999995,9.27413,16.08974,6.9083499999999995,3.409347,4.2171,14.3278,285.0654,2.8507,89,89,89,25.4,25.6,25.46,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_26,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.66,10.75,6.78315,9.29968,16.08283,6.87615,3.365112,4.297,14.4599,289.4981,2.895,89,89,89,25.9,25.9,25.9,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_27,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.66,9.0,6.783939999999999,11.10967,17.89361,6.89504,2.738341,4.267,11.6845,246.9186,2.4692,88,88,88,26.7,26.7,26.7,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_28,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.59,10.75,6.812060000000001,9.30067,16.11273,6.90507,3.385913,4.2008,14.1916,275.3388,2.7534,88,88,88,25.4,26.7,25.89,4349.0,4017.0,28.0,28.0,304.0
+run_0_repetition_29,DONE,Qwen2.5-7B-Instruct-IQ4_XS.gguf,"The World Wide Web was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. Berners-Lee developed the Web to facilitate automatic information sharing among scientists in universities and research institutions worldwide.
+user
+Summarize the following text.
+Text: The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989. He was working at CERN, the European Organization for",113,100,213,16.21,8.92,6.96922,11.21506,18.184279999999998,7.08137,2.818695,4.281,12.0668,262.9239,2.6292,87,87,87,25.8,25.8,25.8,4349.0,4017.0,28.0,28.0,304.0

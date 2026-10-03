@@ -1,0 +1,721 @@
+__run_id,__done,model_file,model_response,input_token_count,output_token_count,total_token_count,prompt_prefill_speed,generation_decoder_speed,prefill_latency,generation_latency,inference_latency,time_to_first_token,avg_current,avg_voltage,avg_power,total_energy_consumption,energy_per_token,battery_capacity,min_battery_capacity,max_battery_capacity,min_temperature,max_temperature,average_temperature,peak_memory,model_weight,KV_cache,context_RAM,compute_RAM
+run_0_repetition_0,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.78,7.63,6.294149999999999,13.09788,19.39203,6.425129999999999,3.190711,4.43,14.1349,322.8062,3.2281,100,100,100,25.2,25.2,25.2,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_1,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,13.44,6.98,6.92122,14.32516,21.246380000000002,7.06447,2.751156,4.3741,12.0506,315.8219,3.1582,100,100,100,25.7,26.5,26.22,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_2,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.77,7.93,6.29697,12.61543,18.9124,6.42312,3.349007,4.414,14.7825,332.5454,3.3255,100,100,100,25.8,25.8,25.8,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_3,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.7,7.29,6.32586,13.72417,20.05003,6.4631,3.010512,4.3896,13.2335,323.6389,3.2364,99.82,99,100,25.7,26.1,25.77,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_4,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.68,7.15,6.336390000000001,13.980979999999999,20.31737,6.4762,2.833444,4.3098,12.1984,291.8652,2.9187,99,99,99,25.4,26.1,25.58,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_5,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.78,7.58,6.29227,13.20009,19.492369999999998,6.42427,3.33477,4.398,14.6663,338.5439,3.3854,98,98,98,25.4,25.4,25.4,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_6,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.7,7.6,6.324479999999999,13.15789,19.48237,6.456059999999999,3.166625,4.3162,13.6661,316.2282,3.1623,98,98,98,25.6,26.2,25.88,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_7,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.47,7.21,6.4278900000000005,13.87823,20.30612,6.56667,2.937889,4.387,12.8885,309.7373,3.0974,97,97,97,26.0,26.0,26.0,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_8,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.8,7.06,6.28482,14.17133,20.45616,6.42653,2.804174,4.3495,12.2003,291.9451,2.9195,97,97,97,25.8,26.1,25.99,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_9,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.71,7.67,6.32197,13.041030000000001,19.363,6.452380000000001,3.246503,4.379,14.2164,327.2302,3.2723,96,96,96,25.9,25.9,25.9,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_10,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.76,7.21,6.30286,13.87748,20.18034,6.44163,2.944394,4.3569,12.8418,304.5423,3.0454,96,96,96,25.8,26.2,25.87,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_11,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.15,6.3,6.573720000000001,15.87228,22.446,6.73244,3.254658,4.2727,13.8673,377.7038,3.777,95,95,95,25.6,25.9,25.67,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_12,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.8,7.23,6.28548,13.827200000000001,20.112689999999997,6.42375,2.840059,4.3462,12.3564,295.8526,2.9585,94.84,94,95,26.2,26.5,26.25,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_13,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.67,6.87,6.33743,14.546280000000001,20.88371,6.48289,2.760743,4.2709,11.7762,287.744,2.8774,94,94,94,25.7,26.4,25.9,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_14,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.76,7.45,6.30265,13.43102,19.733669999999996,6.43696,3.208047,4.3517,13.9614,325.8642,3.2586,93.99,93,94,26.1,26.6,26.1,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_15,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.45,7.16,6.43546,13.964469999999999,20.39993,6.5751,2.841866,4.2358,12.0376,294.2525,2.9425,93,93,93,25.7,26.6,26.09,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_16,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.77,7.98,6.298,12.52675,18.824740000000002,6.4232700000000005,3.378275,4.34,14.6617,331.5214,3.3152,93,93,93,26.1,26.1,26.1,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_17,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.67,7.61,6.33861,13.13959,19.478189999999998,6.47001,3.221871,4.2666,13.7561,318.1763,3.1818,92,92,92,26.0,26.9,26.58,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_18,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.15,7.19,6.5725299999999995,13.91037,20.4829,6.7116299999999995,2.874971,4.33,12.4486,313.6995,3.137,92,92,92,26.2,26.2,26.2,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_19,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.17,7.5,6.5619499999999995,13.32853,19.89048,6.695239999999999,3.122656,4.2774,13.3649,337.3871,3.3739,91,91,91,25.8,26.2,25.92,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_20,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.68,7.25,6.33305,13.78618,20.119229999999998,6.47091,3.006723,4.318,12.983,311.234,3.1123,90,90,90,26.3,26.3,26.3,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_21,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.72,6.95,6.3196,14.3932,20.712799999999998,6.46353,2.848515,4.2959,12.2425,297.8074,2.9781,90,90,90,26.3,26.4,26.32,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_22,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.31,7.35,6.50092,13.61024,20.111159999999998,6.63702,2.888102,4.2016,12.0967,316.4099,3.1641,89,89,89,26.3,27.3,26.54,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_23,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.19,6.77,6.55208,14.77117,21.32325,6.69979,2.772355,4.2767,11.8434,327.7977,3.278,88.75,88,89,26.7,26.8,26.78,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_24,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.15,7.3,6.570819999999999,13.690719999999999,20.26154,6.70773,2.931906,4.1828,12.2261,294.8612,2.9486,88,88,88,26.0,26.8,26.13,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_25,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.7,7.11,6.32618,14.062809999999999,20.388990000000003,6.46681,2.8807,4.2741,12.3077,294.6169,2.9462,87.86,87,88,26.1,26.5,26.16,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_26,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.61,7.22,6.363989999999999,13.84094,20.20493,6.5024,3.100586,4.1973,12.9887,321.3114,3.2131,87,87,87,25.8,26.2,25.92,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_27,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.78,6.95,6.29206,14.3948,20.68685,6.4360100000000005,2.918737,4.2693,12.4669,305.8275,3.0583,86.95,86,87,26.3,26.8,26.32,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_28,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.74,7.86,6.309270000000001,12.71492,19.024189999999997,6.436420000000001,3.435257,4.1998,14.4027,327.0946,3.2709,86,86,86,25.8,26.4,26.05,6163.0,5488.0,84.0,168.0,507.0
+run_0_repetition_29,DONE,gemma-2-9b-it-Q4_K_M.gguf,"Tim Berners-Lee, a British scientist working at CERN, invented the World Wide Web (WWW) in 1989 to facilitate easy information sharing among scientists globally.  
+ 
+Let me know if you'd like me to elaborate on any aspect of this! 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ",93,100,193,14.65,7.37,6.34872,13.563559999999999,19.91228,6.484360000000001,3.143606,4.263,13.4012,317.8364,3.1784,85,85,85,25.8,25.8,25.8,6163.0,5488.0,84.0,168.0,507.0

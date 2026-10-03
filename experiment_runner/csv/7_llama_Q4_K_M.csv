@@ -1,0 +1,151 @@
+__run_id,__done,model_file,model_response,input_token_count,output_token_count,total_token_count,prompt_prefill_speed,generation_decoder_speed,prefill_latency,generation_latency,inference_latency,time_to_first_token,avg_current,avg_voltage,avg_power,total_energy_consumption,energy_per_token,battery_capacity,min_battery_capacity,max_battery_capacity,min_temperature,max_temperature,average_temperature,peak_memory,model_weight,KV_cache,context_RAM,compute_RAM
+run_0_repetition_0,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,17.81,9.98,6.68229,10.01527,16.69756,6.78244,3.349195,4.43,14.8369,302.6207,3.0262,100,100,100,25.9,25.9,25.9,5007,4685,64,64,258
+run_0_repetition_1,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.33,10.2,6.49365,9.80219,16.29584,6.59167,3.280951,4.4025,14.4648,291.563,2.9156,100,100,100,25.5,25.9,25.83,5007,4685,64,64,258
+run_0_repetition_2,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,17.93,10.31,6.63725,9.69951,16.33677,6.73425,3.132394,4.3335,13.5425,271.8663,2.7187,100,100,100,25.2,25.6,25.34,5007,4685,64,64,258
+run_0_repetition_3,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.26,10.43,6.51625,9.58684,16.10309,6.61212,3.338151,4.407,14.7112,295.0447,2.9504,100,100,100,25.6,25.6,25.6,5007,4685,64,64,258
+run_0_repetition_4,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.06,10.53,6.58885,9.49769,16.08654,6.68383,3.362658,4.3937,14.7875,295.6387,2.9564,99,99,99,25.5,26,25.53,5007,4685,64,64,258
+run_0_repetition_5,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,17.93,10.19,6.63854,9.81054,16.44908,6.73665,3.244007,4.3282,14.0119,289.1629,2.8916,99,99,99,25.5,25.8,25.64,5007,4685,64,64,258
+run_0_repetition_6,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.07,10.5,6.58421,9.52388,16.10809,6.67945,3.307545,4.391,14.5234,293.1874,2.9319,98,98,98,25.9,25.9,25.9,5007,4685,64,64,258
+run_0_repetition_7,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.31,10.36,6.49853,9.65333,16.15185,6.59506,3.38953,4.386,14.8665,297.1597,2.9716,97.99,97,98,26,26,26,5007,4685,64,64,258
+run_0_repetition_8,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.13,10.61,6.56483,9.42699,15.99182,6.6591,3.375015,4.3139,14.5299,291.8147,2.9181,97,97,97,25.6,25.9,25.76,5007,4685,64,64,258
+run_0_repetition_9,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.26,10.67,6.5166,9.37257,15.88917,6.61033,3.414014,4.375,14.9363,295.4393,2.9544,97,97,97,26,26,26,5007,4685,64,64,258
+run_0_repetition_10,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.02,10.65,6.60489,9.39028,15.99517,6.69879,3.502851,4.371,15.311,300.7451,3.0075,96,96,96,25.7,25.7,25.7,5007,4685,64,64,258
+run_0_repetition_11,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.3,10.6,6.50221,9.43338,15.93559,6.59654,3.372146,4.3179,14.5441,288.7334,2.8873,95.66,95,96,25.8,26.2,26.07,5007,4685,64,64,258
+run_0_repetition_12,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.27,10.36,6.51256,9.65336,16.16592,6.60909,3.426193,4.25,14.5042,290.0993,2.901,95,95,95,25.5,26,25.6,5007,4685,64,64,258
+run_0_repetition_13,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.24,9.25,6.52296,10.81467,17.33763,6.63111,2.715546,4.355,11.8262,250.5647,2.5056,95,95,95,25.8,25.8,25.8,5007,4685,64,64,258
+run_0_repetition_14,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,17.8,10.57,6.68403,9.46498,16.14901,6.77868,3.505813,4.2938,15.0419,300.4599,3.0046,94,94,94,25.6,26.5,26.24,5007,4685,64,64,258
+run_0_repetition_15,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.26,8.81,6.51691,11.34651,17.86342,6.63038,3.481824,4.2481,14.7451,316.1672,3.1617,94,94,94,25.4,25.8,25.49,5007,4685,64,64,258
+run_0_repetition_16,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.13,10.73,6.56247,9.32381,15.88628,6.65571,3.457252,4.339,15.001,294.6311,2.9463,93,93,93,26,26,26,5007,4685,64,64,258
+run_0_repetition_17,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.35,10.63,6.48436,9.40354,15.88789,6.5784,3.452112,4.3032,14.8446,288.6282,2.8863,92.79,92,93,25.9,26.1,26.06,5007,4685,64,64,258
+run_0_repetition_18,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.07,9.27,6.58463,10.79045,17.37507,6.69253,2.804974,4.2438,11.8916,253.2191,2.5322,92,92,92,25.5,26.1,25.69,5007,4685,64,64,258
+run_0_repetition_19,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.4,10.68,6.46787,9.36582,15.83369,6.561529,3.574271,4.324,15.4551,302.5939,3.0259,92,92,92,25.5,25.5,25.5,5007,4685,64,64,258
+run_0_repetition_20,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.34,9.32,6.48755,10.73228,17.21984,6.59487,2.898207,4.2806,12.4159,260.5632,2.6056,91,91,91,25.8,26.5,26.37,5007,4685,64,64,258
+run_0_repetition_21,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.29,10.69,6.50603,9.35019,15.85623,6.59953,3.429439,4.2306,14.466,285.3466,2.8535,91,91,91,25.2,25.6,25.34,5007,4685,64,64,258
+run_0_repetition_22,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.35,9.29,6.48352,10.76093,17.24446,6.59113,2.772794,4.308,11.9452,252.8292,2.5283,90,90,90,25.7,25.7,25.7,5007,4685,64,64,258
+run_0_repetition_23,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.33,10.7,6.49185,9.34438,15.83622,6.58529,3.482308,4.2915,14.9429,290.9363,2.9094,90,90,90,25.6,25.7,25.69,5007,4685,64,64,258
+run_0_repetition_24,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.33,10.47,6.49335,9.55409,16.04744,6.58889,3.460322,4.2273,14.5878,292.2278,2.9223,89,89,89,25.2,25.6,25.37,5007,4685,64,64,258
+run_0_repetition_25,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.27,9.35,6.5124,10.70054,17.21294,6.61941,2.842755,4.291,12.1983,261.9367,2.6194,89,89,89,25.7,25.7,25.7,5007,4685,64,64,258
+run_0_repetition_26,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.31,10.32,6.49845,9.691,16.18944,6.59536,3.592829,4.2744,15.3627,305.0815,3.0508,88,88,88,25.2,25.7,25.24,5007,4685,64,64,258
+run_0_repetition_27,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.22,10.78,6.53158,9.27239,15.80397,6.6243,3.474494,4.2149,14.6082,285.6755,2.8568,88,88,88,25.2,25.5,25.34,5007,4685,64,64,258
+run_0_repetition_28,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.33,9.57,6.49261,10.4527,16.94531,6.59714,2.913499,4.274,12.4523,257.4226,2.5742,87,87,87,25.6,25.6,25.6,5007,4685,64,64,258
+run_0_repetition_29,DONE,Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf,"The World Wide Web (WWW) was invented by British scientist Tim Berners-Lee in 1989 while he was working at CERN in Switzerland. He created the Web to facilitate automatic information-sharing between scientists globally. 
+
+(Note: The year is mentioned as 1989, but it's worth noting that the first web page was launched on August 6, 1991.) 
+
+However, the text does not mention the launch date of the first web page. If you want to include it",119,100,219,18.39,10.79,6.4712,9.26977,15.74097,6.5639,3.621684,4.274,15.4791,302.1993,3.022,87,87,87,25.6,25.6,25.6,5007,4685,64,64,258
